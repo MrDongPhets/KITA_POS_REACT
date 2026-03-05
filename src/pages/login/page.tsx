@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, LogIn, Building2, Wifi, WifiOff, AlertTriangle, User, LogOut } from "lucide-react"
-import { AuthProvider, useAuth } from "@/components/auth/AuthProvider"
+import { useAuth } from "@/components/auth/AuthProvider"
 import API_CONFIG from "@/config/api" // Import API config
 
 function LoginForm() {
@@ -363,9 +363,5 @@ function LoginForm() {
 }
 
 export default function LoginPage() {
-  return (
-    <AuthProvider>
-      <LoginForm />
-    </AuthProvider>
-  )
+  return <LoginForm />
 }

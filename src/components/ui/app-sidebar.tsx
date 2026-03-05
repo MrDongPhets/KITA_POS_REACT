@@ -27,6 +27,7 @@ import {
 } from "lucide-react"
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
+import { useAuth } from '@/components/auth/AuthProvider'
 
 import {
   Sidebar,
@@ -105,7 +106,6 @@ const clientNavigation = [
     name: "POS",
     href: "/client/pos",
     icon: ShoppingCart,
-    target: "_blank",
   },
   {
     name: "Sales Transactions",
@@ -189,25 +189,20 @@ const clientNavigation = [
 export function AppSidebar({ userType = "client", user = null, company = null }) {
   const { pathname } = useLocation()
   const { state } = useSidebar()
+  const { logout } = useAuth()
   const [inventoryExpanded, setInventoryExpanded] = useState(pathname.startsWith('/client/inventory'))
   const [reportsExpanded, setReportsExpanded] = useState(pathname.startsWith('/client/reports'))
-  
+
   // Determine which navigation to use
   const navigation = userType === "super_admin" ? superAdminNavigation : clientNavigation
-  
+
   // Determine branding
   const isAdmin = userType === "super_admin"
   const brandName = isAdmin ? "Admin Portal" : (company?.name || "Business")
   const BrandIcon = isAdmin ? Crown : Building2
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('userData')
-    localStorage.removeItem('userType')
-    localStorage.removeItem('companyData')
-    localStorage.removeItem('subscriptionData')
-    window.location.href = '/login'
+    logout()
   }
 
   const getUserInitials = () => {

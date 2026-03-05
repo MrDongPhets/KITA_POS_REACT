@@ -2,7 +2,7 @@
 import logger from '@/utils/logger';
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import API_CONFIG from '@/config/api'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,6 +24,7 @@ export function AuthProvider({ children }) {
   const [initialized, setInitialized] = useState(false)
 
   const { pathname } = useLocation()
+  const navigate = useNavigate()
 
   // Initialize auth state only once
   useEffect(() => {
@@ -100,11 +101,11 @@ export function AuthProvider({ children }) {
     // Redirect to appropriate login page
     const currentPath = window.location.pathname
     if (currentPath.startsWith('/admin')) {
-      window.location.href = '/system-admin'
+      navigate('/system-admin')
     } else if (currentPath.startsWith('/pos')) {
-      window.location.href = '/staff/login'
+      navigate('/staff/login')
     } else {
-      window.location.href = '/login'
+      navigate('/login')
     }
   }, [])
 
@@ -212,13 +213,13 @@ export function AuthProvider({ children }) {
     // PREVENT ALREADY AUTHENTICATED USERS FROM ACCESSING LOGIN PAGES
     if (isAuthenticated && isLoginRoute) {
       logger.log('🔒 Already authenticated user trying to access login page')
-      
+
       if (userType === 'super_admin') {
-        window.location.href = '/admin/dashboard'
+        navigate('/admin/dashboard')
       } else if (userType === 'client') {
-        window.location.href = '/client/dashboard'
+        navigate('/client/dashboard')
       } else if (userType === 'staff') {
-        window.location.href = '/pos'
+        navigate('/pos')
       }
       return
     }
@@ -227,11 +228,11 @@ export function AuthProvider({ children }) {
     if (!isAuthenticated && (isAdminRoute || isClientRoute || isPOSRoute)) {
       logger.log('❌ Not authenticated, redirecting to appropriate login')
       if (isAdminRoute) {
-        window.location.href = '/system-admin'
+        navigate('/system-admin')
       } else if (isPOSRoute) {
-        window.location.href = '/staff/login'
+        navigate('/staff/login')
       } else {
-        window.location.href = '/login'
+        navigate('/login')
       }
       return
     }
@@ -243,21 +244,21 @@ export function AuthProvider({ children }) {
       // Staff can only access POS
       if (userType === 'staff' && !isPOSRoute && !isPublicRoute) {
         logger.log('📄 Staff accessing non-POS route, redirecting to POS')
-        window.location.href = '/pos'
+        navigate('/pos')
         return
       }
 
       // Super admin trying to access client/POS routes
       if (userType === 'super_admin' && (isClientRoute || isPOSRoute)) {
         logger.log('📄 Super admin redirecting to admin dashboard')
-        window.location.href = '/admin/dashboard'
+        navigate('/admin/dashboard')
         return
       }
 
       // Client trying to access admin/POS routes
       if (userType === 'client' && (isAdminRoute || isPOSRoute)) {
         logger.log('📄 Client redirecting to client dashboard')
-        window.location.href = '/client/dashboard'
+        navigate('/client/dashboard')
         return
       }
 
@@ -265,11 +266,11 @@ export function AuthProvider({ children }) {
       if (pathname === '/') {
         logger.log('📄 Root path, redirecting based on user type')
         if (userType === 'super_admin') {
-          window.location.href = '/admin/dashboard'
+          navigate('/admin/dashboard')
         } else if (userType === 'client') {
-          window.location.href = '/client/dashboard'
+          navigate('/client/dashboard')
         } else if (userType === 'staff') {
-          window.location.href = '/pos'
+          navigate('/pos')
         }
         return
       }
@@ -334,21 +335,12 @@ export function AuthProvider({ children }) {
           localStorage.setItem('companyData', JSON.stringify(data.company))
         }
 
-        // Update state immediately
+        // Update state immediately - route protection effect will handle redirect
         setUser(data.user)
         setUserType(finalUserType)
         setIsAuthenticated(true)
 
-        logger.log('✅ Login successful, redirecting...')
-
-        // Immediate redirect based on user type
-        setTimeout(() => {
-          if (finalUserType === 'super_admin') {
-            window.location.href = '/admin/dashboard'
-          } else {
-            window.location.href = '/client/dashboard'
-          }
-        }, 100)
+        logger.log('✅ Login successful, route protection will redirect')
 
         return { success: true }
       } else {
@@ -402,11 +394,11 @@ export function AuthProvider({ children }) {
       
       // Redirect based on previous user type
       if (currentUserType === 'staff') {
-        window.location.href = '/staff/login'
+        navigate('/staff/login')
       } else if (currentUserType === 'super_admin') {
-        window.location.href = '/system-admin'
+        navigate('/system-admin')
       } else {
-        window.location.href = '/login'
+        navigate('/login')
       }
     } catch (error) {
       logger.error('Logout error:', error)
@@ -420,7 +412,7 @@ export function AuthProvider({ children }) {
       setUser(null)
       setUserType(null)
       setIsAuthenticated(false)
-      window.location.href = '/login'
+      navigate('/login')
     }
   }, [])
 

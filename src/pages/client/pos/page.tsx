@@ -2,7 +2,7 @@
 import logger from '@/utils/logger';
 
 import { useState, useEffect } from 'react'
-import { ShoppingCart, Search, Package, DollarSign, TrendingUp } from 'lucide-react'
+import { ShoppingCart, Search, Package, DollarSign, TrendingUp, ArrowLeft } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Store as StoreIcon } from "lucide-react"
+import { Link } from 'react-router-dom'
 
 export default function POSPage() {
   const { toast } = useToast()
@@ -384,6 +385,12 @@ export default function POSPage() {
       <div className="bg-white border-b px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
+          <Link to="/client/dashboard">
+            <Button variant="outline" size="sm" className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Dashboard
+            </Button>
+          </Link>
           <div>
             <h1 className="text-2xl font-bold">Point of Sale</h1>
             <div className="flex items-center gap-2 mt-1">
