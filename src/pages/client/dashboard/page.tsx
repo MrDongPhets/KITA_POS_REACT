@@ -16,22 +16,26 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
-import { 
-  ShoppingCart, 
-  Package, 
-  Users, 
+import {
+  ShoppingCart,
+  Package,
+  Users,
   DollarSign,
   RefreshCw,
   Loader2,
   AlertCircle,
   Building2,
-  Store as StoreIcon
+  Store as StoreIcon,
+  Copy,
+  Check
 } from "lucide-react"
 import API_CONFIG from "@/config/api"
 
 export default function ClientDashboard() {
   const [user, setUser] = useState(null)
   const [company, setCompany] = useState(null)
+  const [companyCode, setCompanyCode] = useState<string | null>(null)
+  const [codeCopied, setCodeCopied] = useState(false)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState(null)
@@ -69,9 +73,10 @@ export default function ClientDashboard() {
     if (userData) setUser(JSON.parse(userData))
     if (companyData) setCompany(JSON.parse(companyData))
 
-    // Fetch stores and initial dashboard data
+    // Fetch stores, dashboard data, and company code
     fetchStores()
     fetchDashboardData()
+    fetchCompanyCode()
   }, [])
 
   // Refetch data when store selection changes
@@ -86,6 +91,25 @@ export default function ClientDashboard() {
     return {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
+    }
+  }
+
+  const fetchCompanyCode = async () => {
+    try {
+      const token = localStorage.getItem('authToken')
+      const res = await fetch(`${API_CONFIG.BASE_URL}/client/company`, {
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+      })
+      const data = await res.json()
+      if (data.company?.company_code) setCompanyCode(data.company.company_code)
+    } catch { /* non-critical */ }
+  }
+
+  const copyCompanyCode = () => {
+    if (companyCode) {
+      navigator.clipboard.writeText(companyCode)
+      setCodeCopied(true)
+      setTimeout(() => setCodeCopied(false), 2000)
     }
   }
 
@@ -281,6 +305,28 @@ export default function ClientDashboard() {
               </p>
             </div>
           </div>
+
+          {/* Company Code Banner */}
+          {companyCode && (
+            <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
+              <div className="flex items-center gap-3">
+                <Building2 className="h-5 w-5 text-blue-600" />
+                <div>
+                  <p className="text-xs text-blue-600 font-medium">Staff Company Code</p>
+                  <p className="text-lg font-mono font-bold tracking-widest text-blue-900">{companyCode}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-blue-500">Share this code with your staff to let them log in</p>
+                <button
+                  onClick={copyCompanyCode}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700"
+                >
+                  {codeCopied ? <><Check className="h-3 w-3" /> Copied!</> : <><Copy className="h-3 w-3" /> Copy</>}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

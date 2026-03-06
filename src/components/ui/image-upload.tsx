@@ -106,9 +106,13 @@ export function ImageUpload({
       logger.log('✅ Image URL from server:', data.url);
 
       // Call onChange with the uploaded image URL
+      // For local uploads (SQLite mode), prefix with backend base URL
       if (onChange && data.url) {
-        logger.log('✅ Setting image URL:', data.url);
-        onChange(data.url)
+        const fullUrl = data.url.startsWith('/uploads/')
+          ? `${API_CONFIG.BASE_URL}${data.url}`
+          : data.url
+        logger.log('✅ Setting image URL:', fullUrl);
+        onChange(fullUrl)
       }
 
       logger.log('✅ Image uploaded successfully:', data.url)

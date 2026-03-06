@@ -1,17 +1,18 @@
 // src/app/login/page.jsx - Fixed hardcoded localhost
 
 import { useState, useEffect } from "react"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, LogIn, Building2, Wifi, WifiOff, AlertTriangle, User, LogOut } from "lucide-react"
+import { Loader2, LogIn, Building2, Wifi, WifiOff, AlertTriangle, User, LogOut, Users } from "lucide-react"
 import { useAuth } from "@/components/auth/AuthProvider"
 import API_CONFIG from "@/config/api" // Import API config
 
 function LoginForm() {
   const { login, loading: authLoading, isAuthenticated, user, userType, logout } = useAuth()
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [isOnline, setIsOnline] = useState(true)
@@ -161,9 +162,9 @@ function LoginForm() {
               <Button 
                 onClick={() => {
                   if (userType === 'super_admin') {
-                    window.location.href = '/admin/dashboard'
+                    navigate('/admin/dashboard')
                   } else {
-                    window.location.href = '/client/dashboard'
+                    navigate('/client/dashboard')
                   }
                 }}
                 className="w-full bg-blue-600 hover:bg-blue-700"
@@ -308,17 +309,19 @@ function LoginForm() {
               )}
             </Button>
 
-            <div className="text-center">
-              <Button
-                type="button"
-                variant="link"
-                onClick={fillDemoAccount}
-                className="text-sm text-blue-600"
-                disabled={loading}
-              >
-                Try Demo Account
-              </Button>
-            </div>
+            {!navigator.userAgent.includes('Electron') && !window.matchMedia('(display-mode: standalone)').matches && (
+              <div className="text-center">
+                <Button
+                  type="button"
+                  variant="link"
+                  onClick={fillDemoAccount}
+                  className="text-sm text-blue-600"
+                  disabled={loading}
+                >
+                  Try Demo Account
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Success Alert */}
@@ -339,18 +342,34 @@ function LoginForm() {
             </Alert>
           )}
 
-          {/* Register Link */}
-          <div className="text-center text-sm mt-6 pt-4 border-t">
-            <span className="text-gray-600">Don't have a business account? </span>
-            <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
-              Start Free Trial
-            </Link>
-          </div>
+          {/* Register Link — browser/website only */}
+          {!navigator.userAgent.includes('Electron') && !window.matchMedia('(display-mode: standalone)').matches && (
+            <div className="text-center text-sm mt-6 pt-4 border-t">
+              <span className="text-gray-600">Don't have a business account? </span>
+              <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
+                Start Free Trial
+              </Link>
+            </div>
+          )}
         </CardContent>
       </Card>
 
+      {/* Staff Login Link — only visible in Electron desktop app or PWA */}
+      {(navigator.userAgent.includes('Electron') || window.matchMedia('(display-mode: standalone)').matches) && (
+        <div className="mt-4 w-full max-w-md">
+          <Button
+            variant="outline"
+            className="w-full border-gray-300 text-gray-600 hover:bg-gray-50"
+            onClick={() => navigate('/staff/login')}
+          >
+            <Users className="mr-2 h-4 w-4" />
+            Staff / Cashier Login
+          </Button>
+        </div>
+      )}
+
       {/* Footer */}
-      <div className="mt-8 text-center">
+      <div className="mt-6 text-center">
         <p className="text-xs text-gray-500">
           POS System v2.0.0 | © 2025 TechCorp
         </p>

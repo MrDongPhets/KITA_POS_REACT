@@ -2,7 +2,7 @@
 import logger from '@/utils/logger';
 
 import { useState, useEffect } from 'react'
-import { ShoppingCart, Search, Package, DollarSign, TrendingUp, ArrowLeft } from 'lucide-react'
+import { ShoppingCart, Package, DollarSign, ArrowLeft, LogOut } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
@@ -22,9 +22,11 @@ import {
 } from "@/components/ui/select"
 import { Store as StoreIcon } from "lucide-react"
 import { Link } from 'react-router-dom'
+import { useAuth } from '@/components/auth/AuthProvider'
 
 export default function POSPage() {
   const { toast } = useToast()
+  const { isStaff, logout } = useAuth()
   
   // State
   const [stores, setStores] = useState([])
@@ -77,7 +79,7 @@ export default function POSPage() {
 
   const fetchStores = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/stores`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/pos/stores`, {
         headers: getAuthHeaders()
       })
       const data = await response.json()
@@ -94,7 +96,7 @@ export default function POSPage() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/categories`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/pos/categories`, {
         headers: getAuthHeaders()
       })
       const data = await response.json()
@@ -385,12 +387,19 @@ export default function POSPage() {
       <div className="bg-white border-b px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/client/dashboard">
-            <Button variant="outline" size="sm" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Dashboard
+          {isStaff ? (
+            <Button variant="outline" size="sm" className="gap-2" onClick={logout}>
+              <LogOut className="h-4 w-4" />
+              Logout
             </Button>
-          </Link>
+          ) : (
+            <Link to="/client/dashboard">
+              <Button variant="outline" size="sm" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Dashboard
+              </Button>
+            </Link>
+          )}
           <div>
             <h1 className="text-2xl font-bold">Point of Sale</h1>
             <div className="flex items-center gap-2 mt-1">

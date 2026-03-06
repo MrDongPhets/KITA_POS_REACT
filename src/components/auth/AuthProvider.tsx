@@ -22,6 +22,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [initialized, setInitialized] = useState(false)
+  const [needsSetup, setNeedsSetup] = useState(false)
 
   const { pathname } = useLocation()
   const navigate = useNavigate()
@@ -111,6 +112,23 @@ export function AuthProvider({ children }) {
 
   const initializeAuth = useCallback(async () => {
     try {
+      // Check if first-time setup is needed (SQLite offline mode)
+      try {
+        const setupRes = await fetch(`${API_CONFIG.BASE_URL}/setup/status`)
+        if (setupRes.ok) {
+          const setupData = await setupRes.json()
+          if (setupData.needsSetup) {
+            logger.log('🔧 First-time setup required')
+            setNeedsSetup(true)
+            setLoading(false)
+            setInitialized(true)
+            return
+          }
+        }
+      } catch {
+        // Backend unreachable or not SQLite mode — continue normal auth
+      }
+
       logger.log('📱 Loading from localStorage...')
       
       const token = localStorage.getItem('authToken')
@@ -195,9 +213,18 @@ export function AuthProvider({ children }) {
       user: user?.email || user?.name
     })
 
+    // If setup is needed, redirect everything to /setup
+    if (needsSetup) {
+      if (pathname !== '/setup') {
+        logger.log('🔧 Redirecting to setup wizard')
+        navigate('/setup')
+      }
+      return
+    }
+
     // Define route types
     const publicRoutes = ['/', '/register']
-    const loginRoutes = ['/login', '/system-admin', '/staff/login']
+    const loginRoutes = ['/login', '/system-admin', '/staff/login', '/setup']
     const adminRoutes = ['/admin']
     const clientRoutes = ['/client']
     const posRoutes = ['/pos']
@@ -277,7 +304,7 @@ export function AuthProvider({ children }) {
     }
 
     logger.log('✅ Route protection passed - no redirect needed')
-  }, [isAuthenticated, userType, pathname, user])
+  }, [isAuthenticated, userType, pathname, user, needsSetup])
 
   const login = useCallback(async (credentials, loginType = 'client') => {
     logger.log('🔑 Login attempt:', credentials.email || credentials.staff_id, loginType)
@@ -391,15 +418,7 @@ export function AuthProvider({ children }) {
       setUser(null)
       setUserType(null)
       setIsAuthenticated(false)
-      
-      // Redirect based on previous user type
-      if (currentUserType === 'staff') {
-        navigate('/staff/login')
-      } else if (currentUserType === 'super_admin') {
-        navigate('/system-admin')
-      } else {
-        navigate('/login')
-      }
+      // Route protection will handle redirect when isAuthenticated becomes false
     } catch (error) {
       logger.error('Logout error:', error)
       localStorage.removeItem('authToken')
@@ -408,12 +427,35 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('companyData')
       localStorage.removeItem('subscriptionData')
       localStorage.removeItem('staffData')
-      
+
       setUser(null)
       setUserType(null)
       setIsAuthenticated(false)
-      navigate('/login')
     }
+  }, [])
+
+  const completeStaffLogin = useCallback((data: any) => {
+    logger.log('✅ Staff login complete, updating auth state...')
+    localStorage.setItem('authToken', data.token)
+    localStorage.setItem('userType', 'staff')
+    localStorage.setItem('staffData', JSON.stringify(data.staff))
+    setUser(data.staff)
+    setUserType('staff')
+    setIsAuthenticated(true)
+  }, [])
+
+  const completeSetup = useCallback((data: any) => {
+    logger.log('✅ Setup complete, auto-logging in...')
+    localStorage.setItem('authToken', data.token)
+    localStorage.setItem('userData', JSON.stringify(data.user))
+    localStorage.setItem('userType', data.userType)
+    if (data.company) {
+      localStorage.setItem('companyData', JSON.stringify(data.company))
+    }
+    setUser(data.user)
+    setUserType(data.userType)
+    setIsAuthenticated(true)
+    setNeedsSetup(false)
   }, [])
 
   const forceLogout = useCallback(async () => {
@@ -469,9 +511,12 @@ export function AuthProvider({ children }) {
     loading,
     isAuthenticated,
     initialized,
+    needsSetup,
     login,
     logout,
     forceLogout,
+    completeSetup,
+    completeStaffLogin,
     isClient: userType === 'client',
     isSuperAdmin: userType === 'super_admin',
     isStaff: userType === 'staff',

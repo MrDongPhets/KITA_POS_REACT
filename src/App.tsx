@@ -2,6 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { Toaster } from '@/components/ui/toaster'
 
+// Setup
+import SetupPage from '@/pages/setup/page'
+
 // Auth / public pages
 import LoginPage from '@/pages/login/page'
 import RegisterPage from '@/pages/register/page'
@@ -40,6 +43,9 @@ function App() {
   return (
     <AuthProvider>
       <Routes>
+        {/* Setup (offline first-run) */}
+        <Route path="/setup" element={<SetupPage />} />
+
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
