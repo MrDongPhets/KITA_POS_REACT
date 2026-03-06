@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 'use client'
 
 import { Package, ShoppingCart } from 'lucide-react'
@@ -63,7 +64,7 @@ export default function ProductGrid({ products, onProductClick, loading }) {
             
             <div className="flex items-center justify-between mb-2">
               <p className="text-lg font-bold text-blue-600">
-                ${parseFloat(product.default_price).toFixed(2)}
+                {formatCurrency(parseFloat(product.default_price))}
               </p>
               <Badge 
                 variant={product.stock_quantity > product.min_stock_level ? 'secondary' : 'secondary'}

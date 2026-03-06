@@ -1,5 +1,6 @@
 'use client'
 
+import { formatCurrency } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
@@ -137,7 +138,7 @@ export default function ViewCategoryModal({ category, open, onOpenChange }) {
                     </div>
                     <div className="text-right">
                       <p className="font-medium text-gray-900">
-                        ${product.default_price?.toFixed(2) || '0.00'}
+                        {formatCurrency(product.default_price)}
                       </p>
                     </div>
                   </div>

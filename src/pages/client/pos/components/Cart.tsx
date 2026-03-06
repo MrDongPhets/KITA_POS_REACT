@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 'use client'
 
 import { ShoppingCart, Trash2, Plus, Minus, Percent, CreditCard } from 'lucide-react'
@@ -73,14 +74,14 @@ export default function Cart({
           {/* Subtotal */}
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Subtotal</span>
-            <span className="font-medium">${subtotal.toFixed(2)}</span>
+            <span className="font-medium">{formatCurrency(subtotal)}</span>
           </div>
 
           {/* Discount */}
           {discount > 0 && (
             <div className="flex justify-between text-sm text-green-600">
               <span>Discount</span>
-              <span>-${discount.toFixed(2)}</span>
+              <span>{"-" + formatCurrency(discount)}</span>
             </div>
           )}
 
@@ -89,7 +90,7 @@ export default function Cart({
           {/* Total */}
           <div className="flex justify-between text-lg font-bold">
             <span>Total</span>
-            <span className="text-blue-600">${total.toFixed(2)}</span>
+            <span className="text-blue-600">{formatCurrency(total)}</span>
           </div>
 
           {/* Action Buttons */}
@@ -110,7 +111,7 @@ export default function Cart({
               size="lg"
             >
               <CreditCard className="h-4 w-4 mr-2" />
-              Checkout (${total.toFixed(2)})
+              Checkout ({formatCurrency(total)})
             </Button>
           </div>
         </div>

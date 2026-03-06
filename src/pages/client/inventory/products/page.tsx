@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 // src/app/client/inventory/products/page.jsx - Complete with FIFO expiry
 
 import { useState, useEffect } from "react"
@@ -258,13 +259,6 @@ export default function ProductsPage() {
   const handleManufacture = (product) => {
     setSelectedProduct(product)
     setShowManufactureModal(true)
-  }
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount || 0)
   }
 
   const getStockStatus = (product) => {

@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 // src/components/inventory/ProductRecipeModal.jsx
 
 import { useState, useEffect } from "react"
@@ -222,15 +223,6 @@ export function ProductRecipeModal({ product, open, onOpenChange, onRecipeSaved 
     return recipeItems.reduce((sum, item) => {
       return sum + (item.quantity_needed * item.unit_cost)
     }, 0)
-  }
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 4
-    }).format(amount || 0)
   }
 
   const handleSubmit = async (e) => {

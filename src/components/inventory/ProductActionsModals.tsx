@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 // src/components/inventory/ProductActionsModals.jsx - Complete file with FIFO expiry date
 
 import { useState, useEffect } from "react"
@@ -56,13 +57,6 @@ import API_CONFIG from "@/config/api"
 // ========================================
 export function ViewProductModal({ product, open, onOpenChange }) {
   if (!product) return null
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount || 0)
-  }
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {

@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 'use client'
 
 import { Plus, Minus, X, Package } from 'lucide-react'
@@ -36,7 +37,7 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
           <div className="flex items-start justify-between gap-2 mb-2">
             <div className="flex-1 min-w-0">
               <h4 className="font-medium text-sm line-clamp-1">{item.name}</h4>
-              <p className="text-xs text-gray-500">${item.price.toFixed(2)} each</p>
+              <p className="text-xs text-gray-500">{formatCurrency(item.price)} each</p>
             </div>
             <Button
               variant="ghost"
@@ -83,7 +84,7 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
 
             {/* Item Total */}
             <div className="text-right">
-              <p className="font-bold text-sm">${itemTotal.toFixed(2)}</p>
+              <p className="font-bold text-sm">{formatCurrency(itemTotal)}</p>
               {item.stock_quantity <= 5 && (
                 <p className="text-xs text-orange-600">
                   Only {item.stock_quantity} left
@@ -95,7 +96,7 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
           {/* Discount indicator */}
           {item.discount_amount > 0 && (
             <div className="mt-1 text-xs text-green-600">
-              Discount: -${item.discount_amount.toFixed(2)}
+              Discount: {"-" + formatCurrency(item.discount_amount)}
             </div>
           )}
         </div>

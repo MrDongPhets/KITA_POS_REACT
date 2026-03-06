@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 // src/app/client/sales/[id]/page.jsx
 'use client';
 
@@ -163,13 +164,6 @@ export default function SaleDetailsPage() {
 
   const handlePrint = () => {
     window.print();
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP'
-    }).format(amount);
   };
 
   const formatDate = (dateString) => {

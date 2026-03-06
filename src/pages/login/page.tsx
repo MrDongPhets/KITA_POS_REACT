@@ -9,6 +9,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, LogIn, Building2, Wifi, WifiOff, AlertTriangle, User, LogOut, Users } from "lucide-react"
 import { useAuth } from "@/components/auth/AuthProvider"
 import API_CONFIG from "@/config/api" // Import API config
+import { Capacitor } from "@capacitor/core"
+
+// True when running inside Electron, Capacitor (Android/iOS), or PWA
+const isNativeApp = Capacitor.isNativePlatform()
+  || navigator.userAgent.includes('Electron')
+  || window.matchMedia('(display-mode: standalone)').matches
 
 function LoginForm() {
   const { login, loading: authLoading, isAuthenticated, user, userType, logout } = useAuth()
@@ -35,15 +41,19 @@ function LoginForm() {
     }
   }, [])
 
-  // FIXED: Monitor connection using correct API URL
+  // Monitor connection — 8s timeout to handle Render.com cold starts gracefully
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        // Use the correct API URL from config instead of hardcoded localhost
-        const response = await fetch(`${API_CONFIG.BASE_URL}/health`)
+        const controller = new AbortController()
+        const timeout = setTimeout(() => controller.abort(), 8000)
+        const response = await fetch(`${API_CONFIG.BASE_URL}/health`, { signal: controller.signal })
+        clearTimeout(timeout)
         setIsOnline(response.ok)
       } catch {
-        setIsOnline(false)
+        // Keep previous isOnline state on timeout — don't flash offline on slow server wake
+        // Only set offline on a hard network failure (no connection at all)
+        if (!navigator.onLine) setIsOnline(false)
       }
     }
 
@@ -294,7 +304,7 @@ function LoginForm() {
             <Button 
               onClick={handleLogin}
               className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={loading || !isOnline}
+              disabled={loading}
             >
               {loading ? (
                 <>
@@ -309,7 +319,7 @@ function LoginForm() {
               )}
             </Button>
 
-            {!navigator.userAgent.includes('Electron') && !window.matchMedia('(display-mode: standalone)').matches && (
+            {!isNativeApp && (
               <div className="text-center">
                 <Button
                   type="button"
@@ -343,7 +353,7 @@ function LoginForm() {
           )}
 
           {/* Register Link — browser/website only */}
-          {!navigator.userAgent.includes('Electron') && !window.matchMedia('(display-mode: standalone)').matches && (
+          {!isNativeApp && (
             <div className="text-center text-sm mt-6 pt-4 border-t">
               <span className="text-gray-600">Don't have a business account? </span>
               <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
@@ -354,8 +364,8 @@ function LoginForm() {
         </CardContent>
       </Card>
 
-      {/* Staff Login Link — only visible in Electron desktop app or PWA */}
-      {(navigator.userAgent.includes('Electron') || window.matchMedia('(display-mode: standalone)').matches) && (
+      {/* Staff Login Link — visible in Electron, Capacitor (Android/iOS), or PWA */}
+      {isNativeApp && (
         <div className="mt-4 w-full max-w-md">
           <Button
             variant="outline"

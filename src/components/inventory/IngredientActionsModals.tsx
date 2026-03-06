@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 // src/components/inventory/IngredientActionsModals.jsx
 
 import { useState, useEffect } from "react"
@@ -51,14 +52,6 @@ import API_CONFIG from "@/config/api"
 
 // 1. VIEW INGREDIENT MODAL
 export function ViewIngredientModal({ ingredient, open, onOpenChange }) {
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 4
-    }).format(amount || 0)
-  }
 
   const getStockStatus = (ingredient) => {
     if (ingredient.stock_quantity <= 0) {

@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 // src/app/client/dashboard/page.jsx - Simple version without context
 import logger from '@/utils/logger';
 
@@ -197,13 +198,6 @@ export default function ClientDashboard() {
     } else {
       return "Store Dashboard"
     }
-  }
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount || 0)
   }
 
   const formatDate = (dateString) => {

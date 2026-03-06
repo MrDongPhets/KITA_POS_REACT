@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 // src/app/client/inventory/ingredients/page.jsx
 
 import { useState, useEffect } from "react"
@@ -215,15 +216,6 @@ export default function IngredientsPage() {
   const handleAdjustStock = (ingredient) => {
     setSelectedIngredient(ingredient)
     setShowStockModal(true)
-  }
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 4
-    }).format(amount || 0)
   }
 
   const getStockStatus = (ingredient) => {

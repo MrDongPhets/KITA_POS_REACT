@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 // src/app/client/sales/page.jsx
 'use client';
 
@@ -245,13 +246,6 @@ export default function SalesPage() {
   const handleSearch = () => {
     setPage(1);
     fetchSales();
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP'
-    }).format(amount);
   };
 
   const formatDate = (dateString) => {

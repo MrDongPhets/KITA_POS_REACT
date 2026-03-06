@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 'use client'
 
 import { Printer, Download, Mail, ShoppingBag } from 'lucide-react'
@@ -88,12 +89,12 @@ export default function ReceiptModal({ open, onClose, sale, store, onNewSale }) 
               <div key={index} className="text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">{item.products?.name || 'Product'}</span>
-                  <span>${parseFloat(item.total_price).toFixed(2)}</span>
+                  <span>{formatCurrency(parseFloat(item.total_price))}</span>
                 </div>
                 <div className="flex justify-between text-gray-600 text-xs ml-2">
-                  <span>{item.quantity} x ${parseFloat(item.unit_price).toFixed(2)}</span>
+                  <span>{item.quantity} x {formatCurrency(parseFloat(item.unit_price))}</span>
                   {item.discount_amount > 0 && (
-                    <span className="text-green-600">-${parseFloat(item.discount_amount).toFixed(2)}</span>
+                    <span className="text-green-600">{"-" + formatCurrency(parseFloat(item.discount_amount))}</span>
                   )}
                 </div>
               </div>
@@ -106,18 +107,18 @@ export default function ReceiptModal({ open, onClose, sale, store, onNewSale }) 
           <div className="space-y-2 text-sm mb-4">
             <div className="flex justify-between">
               <span className="text-gray-600">Subtotal:</span>
-              <span>${parseFloat(sale.subtotal || 0).toFixed(2)}</span>
+              <span>{formatCurrency(parseFloat(sale.subtotal || 0))}</span>
             </div>
             {sale.discount_amount > 0 && (
               <div className="flex justify-between text-green-600">
                 <span>Discount:</span>
-                <span>-${parseFloat(sale.discount_amount).toFixed(2)}</span>
+                <span>{"-" + formatCurrency(parseFloat(sale.discount_amount))}</span>
               </div>
             )}
             <Separator />
             <div className="flex justify-between text-lg font-bold">
               <span>Total:</span>
-              <span>${parseFloat(sale.total_amount).toFixed(2)}</span>
+              <span>{formatCurrency(parseFloat(sale.total_amount))}</span>
             </div>
             <div className="flex justify-between text-gray-600">
               <span>Payment Method:</span>

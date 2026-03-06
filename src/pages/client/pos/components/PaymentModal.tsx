@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 'use client'
 
 import { useState } from 'react'
@@ -60,7 +61,7 @@ export default function PaymentModal({ open, onClose, onSubmit, total, loading }
         <DialogHeader>
           <DialogTitle>Complete Payment</DialogTitle>
           <DialogDescription>
-            Total Amount: <span className="text-2xl font-bold text-blue-600">${total.toFixed(2)}</span>
+            Total Amount: <span className="text-2xl font-bold text-blue-600">{formatCurrency(total)}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -110,7 +111,7 @@ export default function PaymentModal({ open, onClose, onSubmit, total, loading }
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Change:</span>
                     <span className={`text-xl font-bold ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      ${Math.abs(change).toFixed(2)}
+                      {formatCurrency(Math.abs(change))}
                     </span>
                   </div>
                   {change < 0 && (

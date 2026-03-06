@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/utils'
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -71,7 +72,7 @@ export default function DiscountModal({ open, onClose, onApply, currentDiscount,
         <DialogHeader>
           <DialogTitle>Apply Discount</DialogTitle>
           <DialogDescription>
-            Subtotal: <span className="font-bold text-gray-900">${subtotal.toFixed(2)}</span>
+            Subtotal: <span className="font-bold text-gray-900">{formatCurrency(subtotal)}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -131,16 +132,16 @@ export default function DiscountModal({ open, onClose, onApply, currentDiscount,
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Subtotal</span>
-                <span className="font-medium">${subtotal.toFixed(2)}</span>
+                <span className="font-medium">{formatCurrency(subtotal)}</span>
               </div>
               <div className="flex justify-between text-sm text-green-600">
                 <span>Discount</span>
-                <span className="font-medium">-${discountAmount.toFixed(2)}</span>
+                <span className="font-medium">{"-" + formatCurrency(discountAmount)}</span>
               </div>
               <div className="h-px bg-blue-300" />
               <div className="flex justify-between text-lg font-bold">
                 <span>New Total</span>
-                <span className="text-blue-600">${finalTotal.toFixed(2)}</span>
+                <span className="text-blue-600">{formatCurrency(finalTotal)}</span>
               </div>
             </div>
           )}
