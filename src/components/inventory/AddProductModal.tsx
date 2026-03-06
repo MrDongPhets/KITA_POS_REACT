@@ -88,6 +88,7 @@ export function AddProductModal({ onProductAdded, trigger = null }) {
         manila_price: "",
         delivery_price: "",
         wholesale_price: "",
+        cost_price: "",
         stock_quantity: "",
         min_stock_level: "",
         max_stock_level: "",
