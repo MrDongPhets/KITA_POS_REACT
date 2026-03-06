@@ -218,6 +218,16 @@ export function ViewProductModal({ product, open, onOpenChange }) {
                   <p className="text-sm font-medium">{formatCurrency(product.wholesale_price)}</p>
                 </div>
               )}
+              {product.cost_price > 0 && (
+                <div className="col-span-2">
+                  <p className="text-xs text-gray-500">Cost Price (Supplier)</p>
+                  <p className="text-sm font-medium text-orange-600">{formatCurrency(product.cost_price)}</p>
+                  <p className="text-xs text-green-600 font-medium mt-1">
+                    Profit: {formatCurrency(product.default_price - product.cost_price)}
+                    {' '}({(((product.default_price - product.cost_price) / product.default_price) * 100).toFixed(1)}% margin)
+                  </p>
+                </div>
+              )}
               {product.is_composite && product.recipe_cost > 0 && (
                 <div className="col-span-2">
                   <p className="text-xs text-gray-500">Recipe Cost (Ingredients)</p>
@@ -451,6 +461,7 @@ export function EditProductModal({ product, open, onOpenChange, onProductUpdated
     manila_price: "",
     delivery_price: "",
     wholesale_price: "",
+    cost_price: "",
     stock_quantity: "",
     min_stock_level: "",
     max_stock_level: "",
@@ -474,6 +485,7 @@ export function EditProductModal({ product, open, onOpenChange, onProductUpdated
         manila_price: product.manila_price || "",
         delivery_price: product.delivery_price || "",
         wholesale_price: product.wholesale_price || "",
+        cost_price: product.cost_price || "",
         stock_quantity: product.stock_quantity || "",
         min_stock_level: product.min_stock_level || "",
         max_stock_level: product.max_stock_level || "",
@@ -813,7 +825,31 @@ export function EditProductModal({ product, open, onOpenChange, onProductUpdated
                     disabled={loading}
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="cost_price">Cost Price (Supplier)</Label>
+                  <Input
+                    id="cost_price"
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={formData.cost_price}
+                    onChange={(e) => handleInputChange('cost_price', e.target.value)}
+                    disabled={loading}
+                  />
+                </div>
               </div>
+
+              {/* Profit margin preview */}
+              {formData.default_price && formData.cost_price && parseFloat(formData.cost_price) > 0 && (
+                <div className="rounded-md bg-green-50 border border-green-200 p-3 text-sm">
+                  <span className="text-green-700 font-medium">
+                    Profit per item: {formatCurrency(parseFloat(formData.default_price) - parseFloat(formData.cost_price))}
+                    {' '}
+                    ({(((parseFloat(formData.default_price) - parseFloat(formData.cost_price)) / parseFloat(formData.default_price)) * 100).toFixed(1)}% margin)
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Stock Information - Only show for non-composite products */}

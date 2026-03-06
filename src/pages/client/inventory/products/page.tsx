@@ -527,6 +527,7 @@ export default function ProductsPage() {
                       <TableHead>Category</TableHead>
                       <TableHead>SKU</TableHead>
                       <TableHead>Price</TableHead>
+                      <TableHead>Cost Price</TableHead>
                       <TableHead>Stock</TableHead>
                       <TableHead>Expiry Date</TableHead>
                       <TableHead>Status</TableHead>
@@ -594,10 +595,17 @@ export default function ProductsPage() {
                           </TableCell>
                           <TableCell>
                             <div className="font-semibold">{formatCurrency(product.default_price)}</div>
-                            {product.is_composite && product.recipe_cost > 0 && (
-                              <div className="text-xs text-gray-500">
-                                Cost: {formatCurrency(product.recipe_cost)}
+                            {product.cost_price > 0 && (
+                              <div className="text-xs text-green-600">
+                                +{(((product.default_price - product.cost_price) / product.default_price) * 100).toFixed(1)}% margin
                               </div>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {product.cost_price > 0 ? (
+                              <div className="font-medium text-orange-600">{formatCurrency(product.cost_price)}</div>
+                            ) : (
+                              <span className="text-gray-400 text-sm">—</span>
                             )}
                           </TableCell>
                           <TableCell>

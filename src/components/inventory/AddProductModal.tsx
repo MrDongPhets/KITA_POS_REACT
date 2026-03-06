@@ -27,6 +27,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { SuccessModal } from "@/components/ui/success-modal"
 import { Loader2, Plus, Package, AlertCircle, ChefHat, Info } from "lucide-react"
 import API_CONFIG from "@/config/api"
+import { formatCurrency } from "@/lib/utils"
 
 export function AddProductModal({ onProductAdded, trigger = null }) {
   const [open, setOpen] = useState(false)
@@ -52,6 +53,7 @@ export function AddProductModal({ onProductAdded, trigger = null }) {
     manila_price: "",
     delivery_price: "",
     wholesale_price: "",
+    cost_price: "",
     stock_quantity: "",
     min_stock_level: "",
     max_stock_level: "",
@@ -438,7 +440,30 @@ export function AddProductModal({ onProductAdded, trigger = null }) {
                     onChange={(e) => handleInputChange('wholesale_price', e.target.value)}
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="cost_price">Cost Price (Supplier)</Label>
+                  <Input
+                    id="cost_price"
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={formData.cost_price}
+                    onChange={(e) => handleInputChange('cost_price', e.target.value)}
+                  />
+                </div>
               </div>
+
+              {/* Profit margin preview */}
+              {formData.default_price && formData.cost_price && parseFloat(formData.cost_price) > 0 && (
+                <div className="rounded-md bg-green-50 border border-green-200 p-3 text-sm">
+                  <span className="text-green-700 font-medium">
+                    Profit per item: {formatCurrency(parseFloat(formData.default_price) - parseFloat(formData.cost_price))}
+                    {' '}
+                    ({(((parseFloat(formData.default_price) - parseFloat(formData.cost_price)) / parseFloat(formData.default_price)) * 100).toFixed(1)}% margin)
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Stock Information - Only show for non-composite products */}
