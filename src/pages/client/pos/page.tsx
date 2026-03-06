@@ -23,6 +23,8 @@ import {
 import { Store as StoreIcon } from "lucide-react"
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/components/auth/AuthProvider'
+import API_CONFIG from '@/config/api'
+import { formatCurrency } from '@/lib/utils'
 
 export default function POSPage() {
   const { toast } = useToast()
@@ -79,7 +81,7 @@ export default function POSPage() {
 
   const fetchStores = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pos/stores`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/pos/stores`, {
         headers: getAuthHeaders()
       })
       const data = await response.json()
@@ -96,7 +98,7 @@ export default function POSPage() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pos/categories`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/pos/categories`, {
         headers: getAuthHeaders()
       })
       const data = await response.json()
@@ -119,7 +121,7 @@ export default function POSPage() {
       
       logger.log('📦 Fetching products for store:', selectedStore.id, 'category:', selectedCategory)
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pos/products/category?${params}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/pos/products/category?${params}`, {
         headers: getAuthHeaders()
       })
       
@@ -149,7 +151,7 @@ export default function POSPage() {
     try {
       logger.log('📊 Fetching today stats for store:', selectedStore.id)
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pos/sales/today?store_id=${selectedStore.id}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/pos/sales/today?store_id=${selectedStore.id}`, {
         headers: getAuthHeaders()
       })
       
@@ -187,7 +189,7 @@ export default function POSPage() {
       
       logger.log('🔍 Searching:', query, 'in store:', selectedStore.id)
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pos/products/search?${params}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/pos/products/search?${params}`, {
         headers: getAuthHeaders()
       })
       const data = await response.json()
@@ -305,7 +307,7 @@ export default function POSPage() {
       })
 
       // ✅ FIXED: Use correct API URL
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pos/sales`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/pos/sales`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -453,7 +455,7 @@ export default function POSPage() {
                 <DollarSign className="h-4 w-4 text-green-600" />
                 <div>
                   <p className="text-xs text-muted-foreground">Today's Revenue</p>
-                  <p className="text-lg font-bold">${todayStats.total.toFixed(2)}</p>
+                  <p className="text-lg font-bold">{formatCurrency(todayStats.total)}</p>
                 </div>
               </div>
             </CardContent>
