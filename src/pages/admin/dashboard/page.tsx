@@ -2,6 +2,7 @@
 import logger from '@/utils/logger';
 
 import { useState, useEffect } from "react"
+import { useNavigate } from 'react-router-dom'
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/ui/app-sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -33,6 +34,7 @@ const getStatusColor = (status) => {
 }
 
 export default function SuperAdminDashboard() {
+  const navigate = useNavigate()
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -95,7 +97,7 @@ export default function SuperAdminDashboard() {
           localStorage.removeItem('companyData')
           localStorage.removeItem('subscriptionData')
           alert('Your session has expired. Please log in again.')
-          window.location.href = '/system-admin'
+          navigate('/system-admin')
           return null
         }
       }
@@ -520,7 +522,7 @@ export default function SuperAdminDashboard() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div 
                   className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
-                  onClick={() => window.location.href = '/admin/companies'}
+                  onClick={() => navigate('/admin/companies')}
                 >
                   <Building2 className="h-6 w-6 text-blue-600 mb-2" />
                   <p className="font-medium">Manage Companies</p>

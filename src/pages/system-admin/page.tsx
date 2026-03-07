@@ -8,10 +8,12 @@ import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Shield, Crown, Lock, Wifi, WifiOff } from "lucide-react"
-import API_CONFIG from "@/config/api" // Import API config
+import API_CONFIG from "@/config/api"
+import { useAuth } from "@/components/auth/AuthProvider"
 
 export default function SystemAdminLogin() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [isOnline, setIsOnline] = useState(true)
@@ -50,34 +52,19 @@ export default function SystemAdminLogin() {
 
   const handleSuperAdminLogin = async () => {
     setError("")
+
+    if (!credentials.email || !credentials.password) {
+      setError("Please enter both email and password")
+      return
+    }
+
     setLoading(true)
-
     try {
-      if (!credentials.email || !credentials.password) {
-        setError("Please enter both email and password")
-        return
+      const result = await login(credentials, 'super_admin')
+      if (!result.success) {
+        setError(result.error || "Invalid admin credentials. Access denied.")
       }
-
-      // FIXED: Use correct API URL
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/super-admin/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials)
-      })
-
-      const data = await response.json()
-
-      if (response.ok && data.token) {
-        // Store super admin data
-        localStorage.setItem('authToken', data.token)
-        localStorage.setItem('userData', JSON.stringify(data.user))
-        localStorage.setItem('userType', 'super_admin')
-        
-        // Redirect to super admin dashboard
-        navigate("/admin/dashboard")
-      } else {
-        setError(data.error || "Invalid admin credentials. Access denied.")
-      }
+      // On success, AuthProvider sets isAuthenticated=true and route protection redirects
     } catch (err) {
       setError("Unable to connect to server. Please check your connection.")
     } finally {

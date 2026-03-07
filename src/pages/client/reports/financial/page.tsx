@@ -358,10 +358,10 @@ export default function FinancialReportsPage() {
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-green-600">
-                              {item.gross_margin.toFixed(1)}%
+                            <p className={`font-bold ${item.gross_margin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {item.gross_margin >= 0 ? '' : ''}{item.gross_margin.toFixed(1)}%
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className={`text-sm ${item.gross_profit >= 0 ? 'text-muted-foreground' : 'text-red-500'}`}>
                               ₱{item.gross_profit.toLocaleString()}
                             </p>
                           </div>

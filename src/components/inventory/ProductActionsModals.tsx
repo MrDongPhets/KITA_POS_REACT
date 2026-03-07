@@ -218,16 +218,20 @@ export function ViewProductModal({ product, open, onOpenChange }) {
                   <p className="text-sm font-medium">{formatCurrency(product.wholesale_price)}</p>
                 </div>
               )}
-              {product.cost_price > 0 && (
-                <div className="col-span-2">
-                  <p className="text-xs text-gray-500">Cost Price (Supplier)</p>
-                  <p className="text-sm font-medium text-orange-600">{formatCurrency(product.cost_price)}</p>
-                  <p className="text-xs text-green-600 font-medium mt-1">
-                    Profit: {formatCurrency(product.default_price - product.cost_price)}
-                    {' '}({(((product.default_price - product.cost_price) / product.default_price) * 100).toFixed(1)}% margin)
-                  </p>
-                </div>
-              )}
+              {product.cost_price > 0 && (() => {
+                const profit = product.default_price - product.cost_price
+                const margin = (profit / product.default_price) * 100
+                return (
+                  <div className="col-span-2">
+                    <p className="text-xs text-gray-500">Cost Price (Supplier)</p>
+                    <p className="text-sm font-medium text-orange-600">{formatCurrency(product.cost_price)}</p>
+                    <p className={`text-xs font-medium mt-1 ${margin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      Profit: {formatCurrency(profit)}
+                      {' '}({margin >= 0 ? '+' : ''}{margin.toFixed(1)}% margin)
+                    </p>
+                  </div>
+                )
+              })()}
               {product.is_composite && product.recipe_cost > 0 && (
                 <div className="col-span-2">
                   <p className="text-xs text-gray-500">Recipe Cost (Ingredients)</p>
@@ -827,29 +831,39 @@ export function EditProductModal({ product, open, onOpenChange, onProductUpdated
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="cost_price">Cost Price (Supplier)</Label>
+                  <Label htmlFor="cost_price">
+                    Cost Price {isComposite ? "(Auto from Recipe)" : "(Supplier)"}
+                  </Label>
                   <Input
                     id="cost_price"
                     type="number"
                     step="0.01"
-                    placeholder="0.00"
+                    placeholder={isComposite ? "Calculated from recipe" : "0.00"}
                     value={formData.cost_price}
                     onChange={(e) => handleInputChange('cost_price', e.target.value)}
                     disabled={loading}
+                    readOnly={isComposite}
+                    className={isComposite ? "bg-gray-100 text-gray-500 cursor-not-allowed" : ""}
                   />
+                  {isComposite && (
+                    <p className="text-xs text-blue-600">Auto-calculated from recipe ingredients. Edit via Recipe button.</p>
+                  )}
                 </div>
               </div>
 
               {/* Profit margin preview */}
-              {formData.default_price && formData.cost_price && parseFloat(formData.cost_price) > 0 && (
-                <div className="rounded-md bg-green-50 border border-green-200 p-3 text-sm">
-                  <span className="text-green-700 font-medium">
-                    Profit per item: {formatCurrency(parseFloat(formData.default_price) - parseFloat(formData.cost_price))}
-                    {' '}
-                    ({(((parseFloat(formData.default_price) - parseFloat(formData.cost_price)) / parseFloat(formData.default_price)) * 100).toFixed(1)}% margin)
-                  </span>
-                </div>
-              )}
+              {formData.default_price && formData.cost_price && parseFloat(formData.cost_price) > 0 && (() => {
+                const profit = parseFloat(formData.default_price) - parseFloat(formData.cost_price)
+                const margin = (profit / parseFloat(formData.default_price)) * 100
+                return (
+                  <div className={`rounded-md p-3 text-sm border ${margin >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                    <span className={`font-medium ${margin >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                      Profit per item: {formatCurrency(profit)}
+                      {' '}({margin >= 0 ? '+' : ''}{margin.toFixed(1)}% margin)
+                    </span>
+                  </div>
+                )
+              })()}
             </div>
 
             {/* Stock Information - Only show for non-composite products */}
