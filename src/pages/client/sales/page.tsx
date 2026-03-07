@@ -99,7 +99,7 @@ export default function SalesPage() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/verify`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -156,10 +156,10 @@ export default function SalesPage() {
 
       // Fetch stores and staff for filters
       const [storesRes, staffRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL}/client/stores`, {
+        fetch(`${API_CONFIG.BASE_URL}/client/stores`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/client/staff`, {
+        fetch(`${API_CONFIG.BASE_URL}/client/staff`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
@@ -201,7 +201,7 @@ export default function SalesPage() {
       if (end_date) params.append('end_date', end_date);
       if (searchTerm) params.append('search', searchTerm);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/sales?${params}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/sales?${params}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -230,7 +230,7 @@ export default function SalesPage() {
       if (end_date) params.append('end_date', end_date);
       if (selectedStore !== 'all') params.append('store_id', selectedStore);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/sales/summary?${params}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/sales/summary?${params}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

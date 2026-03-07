@@ -74,7 +74,7 @@ export default function ActivityLogsPage() {
   const fetchCompany = async (companyId) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/companies/${companyId}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/admin/companies/${companyId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -90,7 +90,7 @@ export default function ActivityLogsPage() {
   const fetchStaff = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/staff/manage/list`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/staff/manage/list`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -115,7 +115,7 @@ export default function ActivityLogsPage() {
       params.append('offset', String(filters.offset));
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/staff/permissions/activity-logs?${params}`,
+        `${API_CONFIG.BASE_URL}/staff/permissions/activity-logs?${params}`,
         {
           headers: { 'Authorization': `Bearer ${token}` }
         }

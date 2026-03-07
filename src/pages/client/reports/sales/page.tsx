@@ -74,7 +74,7 @@ export default function SalesReportsPage() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/verify`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -129,16 +129,16 @@ export default function SalesReportsPage() {
       const { start_date, end_date } = getDateRange();
 
       const [summaryRes, periodRes, topProductsRes, staffRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL}/reports/sales?start_date=${start_date}&end_date=${end_date}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/sales?start_date=${start_date}&end_date=${end_date}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/sales/period?period=${period}&start_date=${start_date}&end_date=${end_date}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/sales/period?period=${period}&start_date=${start_date}&end_date=${end_date}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/sales/top-products?limit=10&start_date=${start_date}&end_date=${end_date}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/sales/top-products?limit=10&start_date=${start_date}&end_date=${end_date}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/sales/staff-performance?start_date=${start_date}&end_date=${end_date}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/sales/staff-performance?start_date=${start_date}&end_date=${end_date}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

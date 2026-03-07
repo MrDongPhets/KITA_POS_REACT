@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select"
 import { Loader2, Package, TrendingUp, TrendingDown } from "lucide-react"
 import { toast } from "sonner"
+import API_CONFIG from '@/config/api';
 
 export default function StockAdjustmentModal({ product, open, onOpenChange, onStockUpdated }) {
   const [loading, setLoading] = useState(false)
@@ -47,7 +48,7 @@ export default function StockAdjustmentModal({ product, open, onOpenChange, onSt
 
     try {
       const token = localStorage.getItem('authToken')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/inventory/adjust-stock`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/inventory/adjust-stock`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

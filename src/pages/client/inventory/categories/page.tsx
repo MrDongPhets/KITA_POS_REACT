@@ -39,6 +39,7 @@ import AddCategoryModal from '@/components/categories/AddCategoryModal'
 import EditCategoryModal from '@/components/categories/EditCategoryModal'
 import ViewCategoryModal from '@/components/categories/ViewCategoryModal'
 import DeleteCategoryDialog from '@/components/categories/DeleteCategoryDialog'
+import API_CONFIG from '@/config/api';
 
 export default function CategoriesPage() {
   const [user, setUser] = useState(null)
@@ -68,7 +69,7 @@ export default function CategoriesPage() {
     try {
       setLoading(true)
       const token = localStorage.getItem('authToken')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/categories`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/categories`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

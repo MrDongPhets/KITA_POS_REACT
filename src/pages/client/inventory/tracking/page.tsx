@@ -49,6 +49,7 @@ import {
   Layers
 } from "lucide-react"
 import StockAdjustmentModal from '@/components/inventory/StockAdjustmentModal'
+import API_CONFIG from '@/config/api';
 
 export default function InventoryTrackingPage() {
   const [user, setUser] = useState(null)
@@ -90,7 +91,7 @@ export default function InventoryTrackingPage() {
   const fetchProducts = async () => {
     try {
       const token = localStorage.getItem('authToken')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/products`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/products`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -111,11 +112,11 @@ export default function InventoryTrackingPage() {
       
       // Fetch both product movements and ingredient movements
       const [productMovements, ingredientMovements] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL}/client/inventory/movements`, {
+        fetch(`${API_CONFIG.BASE_URL}/client/inventory/movements`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }).then(res => res.ok ? res.json() : { movements: [] }),
         
-        fetch(`${import.meta.env.VITE_API_URL}/client/ingredients/movements`, {
+        fetch(`${API_CONFIG.BASE_URL}/client/ingredients/movements`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }).then(res => res.ok ? res.json() : { movements: [] })
       ])

@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
+import API_CONFIG from '@/config/api';
 
 
 export default function RequestStore() {
@@ -25,7 +26,7 @@ export default function RequestStore() {
     setLoading(true)
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/stores/request`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/stores/request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

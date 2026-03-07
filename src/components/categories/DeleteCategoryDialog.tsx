@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Loader2, AlertTriangle, Package, Info } from "lucide-react"
 import { toast } from "sonner"
+import API_CONFIG from '@/config/api';
 
 export default function DeleteCategoryDialog({ category, open, onOpenChange, onCategoryDeleted }) {
   const [loading, setLoading] = useState(false)
@@ -23,7 +24,7 @@ export default function DeleteCategoryDialog({ category, open, onOpenChange, onC
 
     try {
       const token = localStorage.getItem('authToken')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/categories/${category.id}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/categories/${category.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

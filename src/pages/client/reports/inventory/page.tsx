@@ -65,7 +65,7 @@ export default function InventoryReportsPage() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/verify`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -87,16 +87,16 @@ export default function InventoryReportsPage() {
       const token = localStorage.getItem('authToken');
 
       const [summaryRes, valueRes, turnoverRes, lowStockRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL}/reports/inventory`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/inventory`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/inventory/stock-value`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/inventory/stock-value`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/inventory/turnover?days=30`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/inventory/turnover?days=30`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/inventory/low-stock`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/inventory/low-stock`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

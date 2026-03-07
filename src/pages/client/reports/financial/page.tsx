@@ -75,7 +75,7 @@ export default function FinancialReportsPage() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/verify`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -130,16 +130,16 @@ export default function FinancialReportsPage() {
       const { start_date, end_date } = getDateRange();
 
       const [summaryRes, marginsRes, revenueRes, taxRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL}/reports/financial?start_date=${start_date}&end_date=${end_date}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/financial?start_date=${start_date}&end_date=${end_date}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/financial/profit-margins?group_by=${groupBy}&start_date=${start_date}&end_date=${end_date}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/financial/profit-margins?group_by=${groupBy}&start_date=${start_date}&end_date=${end_date}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/financial/revenue-by-store?start_date=${start_date}&end_date=${end_date}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/financial/revenue-by-store?start_date=${start_date}&end_date=${end_date}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/financial/tax?group_by=monthly&start_date=${start_date}&end_date=${end_date}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/financial/tax?group_by=monthly&start_date=${start_date}&end_date=${end_date}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog"
 import { Plus, Loader2, Folder, FolderOpen, Archive, Tag, Layers } from "lucide-react"
 import { toast } from "sonner"
+import API_CONFIG from '@/config/api';
 
 const CATEGORY_COLORS = [
   '#3B82F6', // Blue
@@ -59,7 +60,7 @@ export default function AddCategoryModal({ onCategoryAdded }) {
 
     try {
       const token = localStorage.getItem('authToken')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/categories`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

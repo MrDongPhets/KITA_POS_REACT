@@ -53,7 +53,7 @@ export default function ReportsPage() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/verify`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -84,10 +84,10 @@ export default function ReportsPage() {
 
       // Fetch quick stats from different endpoints
       const [salesRes, inventoryRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL}/reports/sales?start_date=${startOfDay}&end_date=${endOfDay}`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/sales?start_date=${startOfDay}&end_date=${endOfDay}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${import.meta.env.VITE_API_URL}/reports/inventory`, {
+        fetch(`${API_CONFIG.BASE_URL}/reports/inventory`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

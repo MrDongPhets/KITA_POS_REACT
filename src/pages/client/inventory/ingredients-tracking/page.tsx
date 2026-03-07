@@ -47,6 +47,7 @@ import {
   RotateCcw
 } from "lucide-react"
 import { StockAdjustmentModal } from '@/components/inventory/IngredientActionsModals'
+import API_CONFIG from '@/config/api';
 
 export default function IngredientsTrackingPage() {
   const [user, setUser] = useState(null)
@@ -87,7 +88,7 @@ export default function IngredientsTrackingPage() {
   const fetchIngredients = async () => {
     try {
       const token = localStorage.getItem('authToken')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/ingredients`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/ingredients`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -105,7 +106,7 @@ export default function IngredientsTrackingPage() {
   const fetchMovements = async () => {
     try {
       const token = localStorage.getItem('authToken')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/ingredients/movements`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/ingredients/movements`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

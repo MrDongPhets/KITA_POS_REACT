@@ -86,7 +86,7 @@ export default function SaleDetailsPage() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/verify`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -107,7 +107,7 @@ export default function SaleDetailsPage() {
       setError(null);
       const token = localStorage.getItem('authToken');
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/sales/${saleId}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/sales/${saleId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -139,7 +139,7 @@ export default function SaleDetailsPage() {
       setVoidLoading(true);
       const token = localStorage.getItem('authToken');
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/client/sales/${saleId}/void`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/client/sales/${saleId}/void`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
