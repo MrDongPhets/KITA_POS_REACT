@@ -280,7 +280,7 @@ export default function SuperAdminDashboard() {
     },
     {
       title: "Active Subscriptions",
-      value: `$${dashboardData.stats.totalRevenue.toLocaleString()}`,
+      value: `₱${dashboardData.stats.totalRevenue.toLocaleString()}`,
       icon: CreditCard,
       description: "Monthly recurring revenue",
       trend: "+15% from last month",

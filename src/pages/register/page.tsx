@@ -484,7 +484,7 @@ export default function RegisterPage() {
                       </div>
                       <h3 className="font-semibold text-lg mb-2">{plan.name}</h3>
                       <div className="mb-4">
-                        <span className="text-3xl font-bold">${plan.price}</span>
+                        <span className="text-3xl font-bold">₱{plan.price}</span>
                         <span className="text-gray-500 ml-1">/{plan.duration}</span>
                       </div>
                       <ul className="space-y-2 text-sm">

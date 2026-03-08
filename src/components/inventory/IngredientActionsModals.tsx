@@ -408,7 +408,7 @@ export function EditIngredientModal({ ingredient, open, onOpenChange, onIngredie
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="unit_cost">Unit Cost * ($)</Label>
+                    <Label htmlFor="unit_cost">Unit Cost * (₱)</Label>
                     <Input
                       id="unit_cost"
                       type="number"

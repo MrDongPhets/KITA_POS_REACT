@@ -398,8 +398,8 @@ export default function IngredientsTrackingPage() {
                           </TableCell>
                           <TableCell className="text-gray-500">{ingredient.unit}</TableCell>
                           <TableCell>{ingredient.min_stock_level || 'N/A'}</TableCell>
-                          <TableCell>${ingredient.unit_cost.toFixed(4)}</TableCell>
-                          <TableCell className="font-medium">${totalValue}</TableCell>
+                          <TableCell>₱{ingredient.unit_cost.toFixed(4)}</TableCell>
+                          <TableCell className="font-medium">₱{totalValue}</TableCell>
                           <TableCell>
                             <Badge className={stockStatus.color}>
                               <StatusIcon className="w-3 h-3 mr-1" />

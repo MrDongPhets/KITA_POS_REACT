@@ -415,7 +415,7 @@ export default function InventoryTrackingPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-2xl font-bold text-green-600">
-                      ${totalValue.toLocaleString()}
+                      ₱{totalValue.toLocaleString()}
                     </p>
                     <p className="text-sm text-gray-600">Inventory Value</p>
                   </div>
