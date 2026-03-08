@@ -203,11 +203,11 @@ function LoginForm() {
         {/* Footer */}
         <div className="mt-8 text-center">
           <p className="text-xs text-gray-500">
-            POS System v2.0.0 | © 2025 TechCorp
+            POS System v2.0.0 | © 2025 Mustard Digitals
           </p>
-          <p className="text-xs text-gray-400 mt-1">
+          {/* <p className="text-xs text-gray-400 mt-1">
             Secure session active • API: {API_CONFIG.BASE_URL}
-          </p>
+          </p> */}
         </div>
       </div>
     )

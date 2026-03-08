@@ -31,6 +31,7 @@ const STATUS_CONFIG = {
 }
 
 export default function AdminSubscriptions() {
+  const [user, setUser] = useState(null)
   const [companies, setCompanies] = useState([])
   const [loading, setLoading] = useState(true)
   const [processingId, setProcessingId] = useState(null)
@@ -59,7 +60,11 @@ export default function AdminSubscriptions() {
     }
   }
 
-  useEffect(() => { fetchSubscriptions() }, [])
+  useEffect(() => {
+    const userData = localStorage.getItem('userData')
+    if (userData) setUser(JSON.parse(userData))
+    fetchSubscriptions()
+  }, [])
 
   const handleActivate = async () => {
     if (!selectedCompany) return
@@ -139,7 +144,7 @@ export default function AdminSubscriptions() {
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar userType="super_admin" user={user} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
