@@ -75,6 +75,7 @@ import {
 } from "@/components/inventory/ProductActionsModals"
 import { ProductRecipeModal } from "@/components/inventory/ProductRecipeModal"
 import { ManufactureProductModal } from "@/components/inventory/ManufactureProductModal"
+import StockAdjustmentModal from "@/components/inventory/StockAdjustmentModal"
 import API_CONFIG from "@/config/api"
 
 export default function ProductsPage() {
@@ -112,6 +113,7 @@ export default function ProductsPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showRecipeModal, setShowRecipeModal] = useState(false)
   const [showManufactureModal, setShowManufactureModal] = useState(false)
+  const [showAdjustStockModal, setShowAdjustStockModal] = useState(false)
 
   useEffect(() => {
     const userData = localStorage.getItem('userData')
@@ -794,14 +796,23 @@ export default function ProductsPage() {
                                 )}
                                 
                                 {product.is_composite && (
-                                  <DropdownMenuItem 
+                                  <DropdownMenuItem
                                     onClick={() => handleManufacture(product)}
                                   >
                                     <Factory className="mr-2 h-4 w-4" />
                                     Manufacture
                                   </DropdownMenuItem>
                                 )}
-                                
+
+                                {!product.is_composite && (
+                                  <DropdownMenuItem
+                                    onClick={() => { setSelectedProduct(product); setShowAdjustStockModal(true) }}
+                                  >
+                                    <Package className="mr-2 h-4 w-4" />
+                                    Adjust Stock
+                                  </DropdownMenuItem>
+                                )}
+
                                 <DropdownMenuSeparator />
                                 
                                 <DropdownMenuItem 
@@ -871,6 +882,12 @@ export default function ProductsPage() {
               open={showManufactureModal}
               onOpenChange={setShowManufactureModal}
               onManufactured={handleRefresh}
+            />
+            <StockAdjustmentModal
+              product={selectedProduct}
+              open={showAdjustStockModal}
+              onOpenChange={setShowAdjustStockModal}
+              onStockUpdated={handleRefresh}
             />
           </>
         )}
