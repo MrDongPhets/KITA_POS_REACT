@@ -54,6 +54,7 @@ export function AddProductModal({ onProductAdded, trigger = null }) {
     delivery_price: "",
     wholesale_price: "",
     cost_price: "",
+    expiry_date: "",
     stock_quantity: "",
     min_stock_level: "",
     max_stock_level: "",
@@ -89,6 +90,7 @@ export function AddProductModal({ onProductAdded, trigger = null }) {
         delivery_price: "",
         wholesale_price: "",
         cost_price: "",
+        expiry_date: "",
         stock_quantity: "",
         min_stock_level: "",
         max_stock_level: "",
@@ -476,6 +478,19 @@ export function AddProductModal({ onProductAdded, trigger = null }) {
                 )
               })()}
             </div>
+
+            {/* Expiry Date - Only for non-composite products */}
+            {!isComposite && (
+              <div className="space-y-2">
+                <Label htmlFor="expiry_date">Expiry Date <span className="text-gray-400 text-xs">(optional)</span></Label>
+                <Input
+                  id="expiry_date"
+                  type="date"
+                  value={formData.expiry_date}
+                  onChange={(e) => handleInputChange('expiry_date', e.target.value)}
+                />
+              </div>
+            )}
 
             {/* Stock Information - Only show for non-composite products */}
             {!isComposite && (

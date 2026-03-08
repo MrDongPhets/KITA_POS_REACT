@@ -291,6 +291,25 @@ export function ViewProductModal({ product, open, onOpenChange }) {
             )}
           </div>
 
+          {/* Expiry Date - For non-composite products */}
+          {!product.is_composite && product.expiry_date && (() => {
+            const expiry = new Date(product.expiry_date)
+            const now = new Date()
+            const daysUntil = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+            const isExpired = daysUntil < 0
+            const isExpiringSoon = daysUntil >= 0 && daysUntil <= 30
+            return (
+              <div className="col-span-2">
+                <p className="text-xs text-gray-500">Expiry Date</p>
+                <p className={`text-sm font-medium ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-orange-600' : 'text-green-600'}`}>
+                  {expiry.toLocaleDateString()}
+                  {isExpired && ' (EXPIRED)'}
+                  {isExpiringSoon && !isExpired && ` (${daysUntil} days left)`}
+                </p>
+              </div>
+            )
+          })()}
+
           {/* Manufacturing Information - UPDATED: Show EARLIEST expiring batch (FIFO) */}
           {product.is_composite && product.earliest_expiry_date && (
             <>
@@ -466,6 +485,7 @@ export function EditProductModal({ product, open, onOpenChange, onProductUpdated
     delivery_price: "",
     wholesale_price: "",
     cost_price: "",
+    expiry_date: "",
     stock_quantity: "",
     min_stock_level: "",
     max_stock_level: "",
@@ -490,6 +510,7 @@ export function EditProductModal({ product, open, onOpenChange, onProductUpdated
         delivery_price: product.delivery_price || "",
         wholesale_price: product.wholesale_price || "",
         cost_price: product.cost_price || "",
+        expiry_date: product.expiry_date ? product.expiry_date.split('T')[0] : "",
         stock_quantity: product.stock_quantity || "",
         min_stock_level: product.min_stock_level || "",
         max_stock_level: product.max_stock_level || "",
@@ -865,6 +886,20 @@ export function EditProductModal({ product, open, onOpenChange, onProductUpdated
                 )
               })()}
             </div>
+
+            {/* Expiry Date - Only for non-composite products */}
+            {!isComposite && (
+              <div className="space-y-2">
+                <Label htmlFor="expiry_date_edit">Expiry Date <span className="text-gray-400 text-xs">(optional)</span></Label>
+                <Input
+                  id="expiry_date_edit"
+                  type="date"
+                  value={formData.expiry_date}
+                  onChange={(e) => handleInputChange('expiry_date', e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+            )}
 
             {/* Stock Information - Only show for non-composite products */}
             {!isComposite && (

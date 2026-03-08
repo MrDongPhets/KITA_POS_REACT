@@ -727,8 +727,23 @@ export default function ProductsPage() {
                               </div>
                             ) : product.is_composite ? (
                               <span className="text-sm text-gray-400 italic">Made to order</span>
-                            ) : (
-                              <span className="text-sm text-gray-400">-</span>
+                            ) : !product.is_composite && product.expiry_date ? (() => {
+                              const expiry = new Date(product.expiry_date)
+                              const now = new Date()
+                              const daysUntil = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+                              const isExpired = daysUntil < 0
+                              const isExpiringSoon = daysUntil >= 0 && daysUntil <= 30
+                              return (
+                                <div>
+                                  <div className={`text-xs font-medium ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-orange-600' : 'text-green-600'}`}>
+                                    {expiry.toLocaleDateString()}
+                                  </div>
+                                  {isExpired && <div className="text-xs text-red-500">EXPIRED</div>}
+                                  {isExpiringSoon && !isExpired && <div className="text-xs text-orange-500">{daysUntil}d left</div>}
+                                </div>
+                              )
+                            })() : (
+                              <span className="text-gray-400 text-sm">—</span>
                             )}
                           </TableCell>
                           <TableCell>
@@ -769,12 +784,14 @@ export default function ProductsPage() {
                                   View Details
                                 </DropdownMenuItem>
                                 
-                                <DropdownMenuItem 
-                                  onClick={() => handleManageRecipe(product)}
-                                >
-                                  <ChefHat className="mr-2 h-4 w-4" />
-                                  Manage Recipe
-                                </DropdownMenuItem>
+                                {product.is_composite && (
+                                  <DropdownMenuItem
+                                    onClick={() => handleManageRecipe(product)}
+                                  >
+                                    <ChefHat className="mr-2 h-4 w-4" />
+                                    Manage Recipe
+                                  </DropdownMenuItem>
+                                )}
                                 
                                 {product.is_composite && (
                                   <DropdownMenuItem 
