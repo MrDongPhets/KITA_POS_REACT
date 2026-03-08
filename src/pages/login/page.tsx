@@ -87,15 +87,6 @@ function LoginForm() {
     }
   }
 
-  const fillDemoAccount = () => {
-    setCredentials({
-      email: "manager@demobakery.com",
-      password: "password123"
-    })
-    setError("")
-    setSuccessMessage("")
-  }
-
   // Show loading if auth is still initializing
   if (authLoading) {
     return (
@@ -319,19 +310,7 @@ function LoginForm() {
               )}
             </Button>
 
-            {!isNativeApp && (
-              <div className="text-center">
-                <Button
-                  type="button"
-                  variant="link"
-                  onClick={fillDemoAccount}
-                  className="text-sm text-blue-600"
-                  disabled={loading}
-                >
-                  Try Demo Account
-                </Button>
-              </div>
-            )}
+            {/* Try Demo Account button removed */}
           </div>
 
           {/* Success Alert */}
@@ -381,11 +360,11 @@ function LoginForm() {
       {/* Footer */}
       <div className="mt-6 text-center">
         <p className="text-xs text-gray-500">
-          POS System v2.0.0 | © 2025 TechCorp
+          POS System v2.0.0 | © 2025 Mustard Digitals
         </p>
-        <p className="text-xs text-gray-400 mt-1">
+        {/* <p className="text-xs text-gray-400 mt-1">
           API: {API_CONFIG.BASE_URL}
-        </p>
+        </p> */}
       </div>
     </div>
   )
