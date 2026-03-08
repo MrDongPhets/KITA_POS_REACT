@@ -45,6 +45,7 @@ export default function POSPage() {
   const [showDiscount, setShowDiscount] = useState(false)
   const [showReceipt, setShowReceipt] = useState(false)
   const [lastSale, setLastSale] = useState(null)
+  const [lastCartItems, setLastCartItems] = useState([])
   
   // ✅ Helper function for API calls
   const getAuthHeaders = () => ({
@@ -297,17 +298,8 @@ export default function POSPage() {
       const data = await response.json()
       logger.log('✅ Payment successful:', data.receipt_number)
 
-      // Augment sale with cart items for receipt display
-      setLastSale({
-        ...data.sale,
-        sales_items: cart.map(item => ({
-          products: { name: item.name },
-          quantity: item.quantity,
-          unit_price: item.price,
-          total_price: item.price * item.quantity - (item.discount_amount || 0),
-          discount_amount: item.discount_amount || 0
-        }))
-      })
+      setLastSale(data.sale)
+      setLastCartItems([...cart])
       setShowReceipt(true)
       setShowPayment(false)
 
@@ -481,6 +473,7 @@ export default function POSPage() {
         open={showReceipt}
         onClose={() => setShowReceipt(false)}
         sale={lastSale}
+        cartItems={lastCartItems}
         store={selectedStore}
         onNewSale={() => {
           setShowReceipt(false)

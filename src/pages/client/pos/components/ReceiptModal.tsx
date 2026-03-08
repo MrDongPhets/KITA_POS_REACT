@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 
-export default function ReceiptModal({ open, onClose, sale, store, onNewSale }) {
+export default function ReceiptModal({ open, onClose, sale, store, onNewSale, cartItems = [] }) {
   if (!sale) return null
 
   const handlePrint = () => {
@@ -85,16 +85,16 @@ export default function ReceiptModal({ open, onClose, sale, store, onNewSale }) 
 
           {/* Items */}
           <div className="max-h-48 overflow-y-auto space-y-2 mb-4">
-            {sale.sales_items?.length > 0 ? sale.sales_items.map((item, index) => (
+            {cartItems.length > 0 ? cartItems.map((item, index) => (
               <div key={index} className="text-sm">
                 <div className="flex justify-between">
-                  <span className="font-medium">{item.products?.name || 'Product'}</span>
-                  <span>{formatCurrency(parseFloat(item.total_price))}</span>
+                  <span className="font-medium">{item.name}</span>
+                  <span>{formatCurrency(item.price * item.quantity - (item.discount_amount || 0))}</span>
                 </div>
                 <div className="flex justify-between text-gray-500 text-xs ml-2">
-                  <span>{item.quantity} × {formatCurrency(parseFloat(item.unit_price))}</span>
+                  <span>{item.quantity} × {formatCurrency(item.price)}</span>
                   {item.discount_amount > 0 && (
-                    <span className="text-green-600">-{formatCurrency(parseFloat(item.discount_amount))}</span>
+                    <span className="text-green-600">-{formatCurrency(item.discount_amount)}</span>
                   )}
                 </div>
               </div>
