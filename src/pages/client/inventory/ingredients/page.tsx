@@ -2,6 +2,7 @@ import { formatCurrency } from '@/lib/utils'
 // src/app/client/inventory/ingredients/page.jsx
 
 import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/ui/app-sidebar"
 import { Card, CardContent } from "@/components/ui/card"
@@ -77,6 +78,7 @@ export default function IngredientsPage() {
     stores,
     selectedStore,
     viewMode,
+    loading: storesLoading,
     selectStore,
     toggleViewMode,
     fetchStores,
@@ -108,8 +110,10 @@ export default function IngredientsPage() {
   useEffect(() => {
     if (stores.length > 0) {
       fetchIngredients()
+    } else if (!storesLoading) {
+      setLoading(false)
     }
-  }, [stores, selectedStore, viewMode])
+  }, [stores, selectedStore, viewMode, storesLoading])
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem('authToken')
@@ -255,6 +259,30 @@ export default function IngredientsPage() {
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
           <p className="text-gray-600">Loading ingredients...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!storesLoading && stores.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center max-w-md">
+          <Beaker className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">No Store Yet</h2>
+          <p className="text-gray-600 mb-6">
+            You need to create a store before you can manage ingredients.
+          </p>
+          <div className="flex gap-3 justify-center">
+            <Link to="/client/stores">
+              <Button className="bg-blue-600 hover:bg-blue-700">
+                Go to Stores
+              </Button>
+            </Link>
+            <Link to="/client/dashboard">
+              <Button variant="outline">Back to Dashboard</Button>
+            </Link>
+          </div>
         </div>
       </div>
     )

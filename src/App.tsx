@@ -14,6 +14,7 @@ import StaffLoginPage from '@/pages/staff/login/page'
 // Admin pages
 import AdminDashboard from '@/pages/admin/dashboard/page'
 import AdminStoreRequests from '@/pages/admin/store-requests/page'
+import AdminSubscriptions from '@/pages/admin/subscriptions/page'
 
 // Client pages
 import ClientDashboard from '@/pages/client/dashboard/page'
@@ -35,6 +36,7 @@ import StaffPage from '@/pages/client/staff/page'
 import ActivityLogsPage from '@/pages/client/staff/activity-logs/page'
 import StoresPage from '@/pages/client/stores/page'
 import StoreRequestPage from '@/pages/client/stores/request/page'
+import SubscriptionExpiredPage from '@/pages/client/subscription-expired/page'
 
 // Staff POS
 import PosPage from '@/pages/pos/page'
@@ -55,6 +57,7 @@ function App() {
         {/* Admin routes */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/store-requests" element={<AdminStoreRequests />} />
+        <Route path="/admin/subscriptions" element={<AdminSubscriptions />} />
 
         {/* Client routes */}
         <Route path="/client/dashboard" element={<ClientDashboard />} />
@@ -76,6 +79,7 @@ function App() {
         <Route path="/client/staff/activity-logs" element={<ActivityLogsPage />} />
         <Route path="/client/stores" element={<StoresPage />} />
         <Route path="/client/stores/request" element={<StoreRequestPage />} />
+        <Route path="/client/subscription-expired" element={<SubscriptionExpiredPage />} />
 
         {/* Staff POS */}
         <Route path="/pos" element={<PosPage />} />

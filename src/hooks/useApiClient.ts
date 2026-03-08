@@ -1,11 +1,13 @@
 // src/hooks/useApiClient.js - Custom hook for API calls with token handling
 import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/components/auth/AuthProvider'
 import authService from '@/services/authService'
 import logger from '@/utils/logger';
 
 export function useApiClient() {
   const { logout } = useAuth()
+  const navigate = useNavigate()
 
   const apiCall = useCallback(async (endpoint, options = {}) => {
     try {
@@ -14,11 +16,17 @@ export function useApiClient() {
       // Handle different response statuses
       if (response.status === 401 || response.status === 403) {
         const errorData = await response.json()
-        
+
         if (errorData.code === 'TOKEN_EXPIRED' || errorData.code === 'INVALID_TOKEN') {
           logger.log('🚨 Token expired during API call, logging out')
           logout()
           throw new Error('Session expired. Please login again.')
+        }
+
+        if (errorData.code === 'SUBSCRIPTION_EXPIRED') {
+          logger.log('🚨 Subscription expired, redirecting')
+          navigate('/client/subscription-expired')
+          throw new Error(errorData.error || 'Subscription expired.')
         }
       }
 

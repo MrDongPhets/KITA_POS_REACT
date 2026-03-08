@@ -1,6 +1,4 @@
-// src/app/client/stores/page.js
-'use client'
-
+// src/pages/client/stores/page.tsx
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
@@ -13,26 +11,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { 
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
+import {
+  Breadcrumb, BreadcrumbItem, BreadcrumbLink,
+  BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { 
-  Plus, 
-  Store, 
-  MapPin, 
-  Phone, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  Pause,
-  Building,
-  RefreshCw
-} from 'lucide-react'
+import { Plus, Store, MapPin, Phone, CheckCircle, XCircle, Pause, RefreshCw } from 'lucide-react'
 import { toast } from "sonner"
 import API_CONFIG from "@/config/api"
 
@@ -42,129 +25,75 @@ export default function ClientStores() {
   const [stores, setStores] = useState([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-  const [showRequestDialog, setShowRequestDialog] = useState(false)
+  const [showDialog, setShowDialog] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
-    name: '',
-    address: '',
-    phone: '',
-    description: ''
-  })
+  const [formData, setFormData] = useState({ name: '', address: '', phone: '', description: '' })
 
   useEffect(() => {
-    // Get user data from localStorage
     const userData = localStorage.getItem('userData')
-    if (userData) {
-      setUser(JSON.parse(userData))
-    }
-    
+    if (userData) setUser(JSON.parse(userData))
     fetchStores()
   }, [])
 
+  const getAuthHeaders = () => ({
+    'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+    'Content-Type': 'application/json',
+  })
+
   const fetchStores = async () => {
     try {
-      const token = localStorage.getItem('authToken')
-      
-      const response = await fetch(`${API_CONFIG.BASE_URL}/client/stores`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
+      const res = await fetch(`${API_CONFIG.BASE_URL}/client/stores`, { headers: getAuthHeaders() })
+      if (res.ok) {
+        const data = await res.json()
         setStores(data.stores || [])
       } else {
-        const errorData = await response.json()
-        toast.error(errorData.error || 'Failed to fetch stores')
+        toast.error('Failed to fetch stores')
       }
-    } catch (error) {
-      console.error('Fetch stores error:', error)
-      toast.error('Network error occurred')
+    } catch {
+      toast.error('Network error')
     } finally {
       setLoading(false)
+      setRefreshing(false)
     }
   }
 
-  const handleRefresh = async () => {
-    setRefreshing(true)
-    await fetchStores()
-    setRefreshing(false)
-  }
+  const handleRefresh = () => { setRefreshing(true); fetchStores() }
 
-  const handleSubmitRequest = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitting(true)
-
     try {
-      const token = localStorage.getItem('authToken')
-      
-      const response = await fetch(`${API_CONFIG.BASE_URL}/client/stores/request`, {
+      const res = await fetch(`${API_CONFIG.BASE_URL}/client/stores/request`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
+        headers: getAuthHeaders(),
+        body: JSON.stringify(formData),
       })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        toast.success('Store request submitted successfully! Waiting for admin approval.')
-        setShowRequestDialog(false)
+      const data = await res.json()
+      if (res.ok) {
+        toast.success('Store created successfully!')
+        setShowDialog(false)
         setFormData({ name: '', address: '', phone: '', description: '' })
         fetchStores()
       } else {
-        toast.error(data.error || 'Failed to submit store request')
+        toast.error(data.error || 'Failed to create store')
       }
-    } catch (error) {
-      console.error('Store request error:', error)
-      toast.error('Network error occurred')
+    } catch {
+      toast.error('Network error')
     } finally {
       setSubmitting(false)
     }
   }
 
-  const handleInputChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }))
-  }
-
   const getStatusBadge = (status) => {
-    const statusConfig = {
-      active: { 
-        icon: CheckCircle, 
-        text: "Active",
-        className: "bg-green-100 text-green-800 hover:bg-green-200"
-      },
-      pending: { 
-        icon: Clock, 
-        text: "Pending Approval",
-        className: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-      },
-      suspended: { 
-        icon: Pause, 
-        text: "Suspended",
-        className: "bg-gray-100 text-gray-800 hover:bg-gray-200"
-      },
-      cancelled: { 
-        icon: XCircle, 
-        text: "Rejected",
-        className: "bg-red-100 text-red-800 hover:bg-red-200"
-      }
-    }
-
-    const config = statusConfig[status] || statusConfig.pending
-    const IconComponent = config.icon
-
+    const cfg = {
+      active:    { icon: CheckCircle, text: 'Active',     cls: 'bg-green-100 text-green-800' },
+      suspended: { icon: Pause,       text: 'Suspended',  cls: 'bg-gray-100 text-gray-800' },
+      cancelled: { icon: XCircle,     text: 'Inactive',   cls: 'bg-red-100 text-red-800' },
+    }[status] || { icon: CheckCircle, text: 'Active', cls: 'bg-green-100 text-green-800' }
     return (
-      <Badge className={config.className}>
-        <IconComponent className="w-3 h-3 mr-1" />
-        {config.text}
+      <Badge className={cfg.cls}>
+        <cfg.icon className="w-3 h-3 mr-1" />
+        {cfg.text}
       </Badge>
     )
   }
@@ -189,7 +118,6 @@ export default function ClientStores() {
     <SidebarProvider>
       <AppSidebar userType="client" user={user} />
       <SidebarInset>
-        {/* Header */}
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
@@ -197,9 +125,7 @@ export default function ClientStores() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/client">
-                    Dashboard
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="/client/dashboard">Dashboard</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
@@ -209,84 +135,54 @@ export default function ClientStores() {
             </Breadcrumb>
           </div>
           <div className="ml-auto px-4 flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleRefresh}
-              disabled={refreshing}
-            >
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
               <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
-            <Dialog open={showRequestDialog} onOpenChange={setShowRequestDialog}>
+            <Dialog open={showDialog} onOpenChange={setShowDialog}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
-                  Request New Store
+                  Add Store
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Request New Store</DialogTitle>
+                  <DialogTitle>Create New Store</DialogTitle>
                   <p className="text-sm text-muted-foreground">
-                    Submit a request for a new store. An admin will review and activate your store.
+                    Your store will be active immediately after creation.
                   </p>
                 </DialogHeader>
-                <form onSubmit={handleSubmitRequest} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <Label htmlFor="name">Store Name *</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Enter store name"
-                      required
-                    />
+                    <Input id="name" name="name" value={formData.name}
+                      onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                      placeholder="Enter store name" required />
                   </div>
-
                   <div>
                     <Label htmlFor="address">Address *</Label>
-                    <Textarea
-                      id="address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      placeholder="Enter store address"
-                      required
-                      rows={3}
-                    />
+                    <Textarea id="address" name="address" value={formData.address}
+                      onChange={e => setFormData(p => ({ ...p, address: e.target.value }))}
+                      placeholder="Enter store address" required rows={3} />
                   </div>
-
                   <div>
                     <Label htmlFor="phone">Phone</Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      placeholder="Enter phone number"
-                      type="tel"
-                    />
+                    <Input id="phone" name="phone" value={formData.phone} type="tel"
+                      onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
+                      placeholder="Enter phone number" />
                   </div>
-
                   <div>
                     <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      name="description"
-                      value={formData.description}
-                      onChange={handleInputChange}
-                      placeholder="Additional details about the store"
-                      rows={3}
-                    />
+                    <Textarea id="description" name="description" value={formData.description}
+                      onChange={e => setFormData(p => ({ ...p, description: e.target.value }))}
+                      placeholder="Additional details about the store" rows={2} />
                   </div>
-
-                  <div className="flex gap-2 pt-4">
+                  <div className="flex gap-2 pt-2">
                     <Button type="submit" disabled={submitting}>
-                      {submitting ? 'Submitting...' : 'Submit Request'}
+                      {submitting ? 'Creating...' : 'Create Store'}
                     </Button>
-                    <Button type="button" variant="outline" onClick={() => setShowRequestDialog(false)}>
+                    <Button type="button" variant="outline" onClick={() => setShowDialog(false)}>
                       Cancel
                     </Button>
                   </div>
@@ -296,81 +192,43 @@ export default function ClientStores() {
           </div>
         </header>
 
-        {/* Main Content */}
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {/* Page Header */}
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
                 <Store className="h-6 w-6 text-blue-600" />
                 My Stores
               </h1>
-              <p className="text-gray-600 mt-1">
-                Manage your store locations • {stores.length} total stores
-              </p>
+              <p className="text-gray-600 mt-1">{stores.length} store{stores.length !== 1 ? 's' : ''}</p>
             </div>
           </div>
 
-          {/* Store Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900">{stores.length}</p>
-                    <p className="text-sm text-gray-600">Total Stores</p>
-                  </div>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Store className="h-6 w-6 text-blue-600" />
-                  </div>
+              <CardContent className="p-4 flex items-center gap-3">
+                <Store className="h-8 w-8 text-blue-600" />
+                <div>
+                  <p className="text-2xl font-bold">{stores.length}</p>
+                  <p className="text-xs text-gray-500">Total Stores</p>
                 </div>
               </CardContent>
             </Card>
-
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stores.filter(s => s.status === 'active').length}
-                    </p>
-                    <p className="text-sm text-gray-600">Active Stores</p>
-                  </div>
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="h-6 w-6 text-green-600" />
-                  </div>
+              <CardContent className="p-4 flex items-center gap-3">
+                <CheckCircle className="h-8 w-8 text-green-600" />
+                <div>
+                  <p className="text-2xl font-bold">{stores.filter(s => s.status === 'active' || s.is_active).length}</p>
+                  <p className="text-xs text-gray-500">Active</p>
                 </div>
               </CardContent>
             </Card>
-
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stores.filter(s => s.status === 'pending').length}
-                    </p>
-                    <p className="text-sm text-gray-600">Pending Approval</p>
-                  </div>
-                  <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <Clock className="h-6 w-6 text-yellow-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stores.filter(s => s.status === 'cancelled').length}
-                    </p>
-                    <p className="text-sm text-gray-600">Rejected</p>
-                  </div>
-                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                    <XCircle className="h-6 w-6 text-red-600" />
-                  </div>
+              <CardContent className="p-4 flex items-center gap-3">
+                <XCircle className="h-8 w-8 text-gray-400" />
+                <div>
+                  <p className="text-2xl font-bold">{stores.filter(s => s.status === 'suspended' || s.status === 'cancelled').length}</p>
+                  <p className="text-xs text-gray-500">Inactive</p>
                 </div>
               </CardContent>
             </Card>
@@ -381,19 +239,17 @@ export default function ClientStores() {
             <Card>
               <CardContent className="text-center py-12">
                 <Store className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-medium mb-2">No stores found</h3>
-                <p className="text-muted-foreground mb-4">
-                  You haven't created any stores yet. Request your first store to get started.
-                </p>
-                <Button onClick={() => setShowRequestDialog(true)}>
+                <h3 className="text-lg font-medium mb-2">No stores yet</h3>
+                <p className="text-muted-foreground mb-4">Create your first store to get started.</p>
+                <Button onClick={() => setShowDialog(true)}>
                   <Plus className="w-4 h-4 mr-2" />
-                  Request First Store
+                  Create First Store
                 </Button>
               </CardContent>
             </Card>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {stores.map((store) => (
+              {stores.map(store => (
                 <Card key={store.id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -409,50 +265,24 @@ export default function ClientStores() {
                       {store.address && (
                         <div className="flex items-start gap-2">
                           <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
-                          <span className="text-sm text-muted-foreground">
-                            {store.address}
-                          </span>
+                          <span className="text-sm text-muted-foreground">{store.address}</span>
                         </div>
                       )}
-                      
                       {store.phone && (
                         <div className="flex items-center gap-2">
                           <Phone className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm text-muted-foreground">
-                            {store.phone}
-                          </span>
+                          <span className="text-sm text-muted-foreground">{store.phone}</span>
                         </div>
                       )}
-
-                      <div className="pt-2 text-xs text-muted-foreground">
+                      <div className="pt-1 text-xs text-muted-foreground">
                         Created: {new Date(store.created_at).toLocaleDateString()}
                       </div>
-
-                      {store.status === 'active' && (
-                        <div className="pt-2">
-                          <Button 
-                            size="sm" 
-                            className="w-full"
-                            onClick={() => navigate(`/client/dashboard?store=${store.id}`)}
-                          >
-                            Access Dashboard
+                      {(store.status === 'active' || store.is_active) && (
+                        <div className="pt-1">
+                          <Button size="sm" className="w-full"
+                            onClick={() => navigate(`/client/dashboard?store=${store.id}`)}>
+                            Go to Dashboard
                           </Button>
-                        </div>
-                      )}
-
-                      {store.status === 'pending' && (
-                        <div className="pt-2">
-                          <div className="text-xs text-amber-600 bg-amber-50 p-2 rounded">
-                            ⏳ Waiting for admin approval
-                          </div>
-                        </div>
-                      )}
-
-                      {store.status === 'cancelled' && store.settings?.rejection_reason && (
-                        <div className="pt-2">
-                          <div className="text-xs text-red-600 bg-red-50 p-2 rounded">
-                            ❌ Rejected: {store.settings.rejection_reason}
-                          </div>
                         </div>
                       )}
                     </div>

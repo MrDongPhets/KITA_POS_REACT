@@ -364,19 +364,32 @@ export default function POSPage() {
 
   if (!selectedStore) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen bg-gray-50">
         <Card className="w-96">
           <CardHeader>
-            <CardTitle>No Store Selected</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <StoreIcon className="h-5 w-5 text-gray-400" />
+              No Store Found
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">Please create a store first to use POS.</p>
-            <Button 
-              onClick={fetchStores}
-              className="mt-4 w-full"
-            >
+          <CardContent className="space-y-3">
+            <p className="text-muted-foreground text-sm">
+              You need to create a store before using the POS.
+            </p>
+            <Button onClick={fetchStores} variant="outline" className="w-full">
               Refresh Stores
             </Button>
+            <Link to="/client/stores" className="block">
+              <Button className="w-full">
+                <StoreIcon className="mr-2 h-4 w-4" />
+                Go to Stores
+              </Button>
+            </Link>
+            <Link to="/client/dashboard" className="block">
+              <Button variant="ghost" className="w-full">
+                Back to Dashboard
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>
