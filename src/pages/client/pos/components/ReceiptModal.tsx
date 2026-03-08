@@ -15,7 +15,81 @@ export default function ReceiptModal({ open, onClose, sale, store, onNewSale, ca
   if (!sale) return null
 
   const handlePrint = () => {
-    window.print()
+    const storeName = store?.name || 'Store'
+    const storeAddress = store?.address || ''
+    const storePhone = store?.phone || ''
+
+    const itemsHtml = cartItems.map(item => `
+      <tr>
+        <td style="padding:4px 0">${item.name}</td>
+        <td style="text-align:center;padding:4px 8px">${item.quantity}</td>
+        <td style="text-align:right;padding:4px 0">₱${(item.price * item.quantity - (item.discount_amount || 0)).toFixed(2)}</td>
+      </tr>
+    `).join('')
+
+    const printHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Receipt</title>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { font-family: 'Courier New', monospace; font-size: 12px; width: 300px; margin: 0 auto; padding: 16px; }
+          .center { text-align: center; }
+          .divider { border-top: 1px dashed #000; margin: 8px 0; }
+          .bold { font-weight: bold; }
+          .large { font-size: 14px; }
+          table { width: 100%; border-collapse: collapse; }
+          .total-row td { font-weight: bold; font-size: 14px; border-top: 1px dashed #000; padding-top: 6px; }
+          .footer { margin-top: 12px; text-align: center; font-size: 11px; }
+        </style>
+      </head>
+      <body>
+        <div class="center">
+          <div class="bold large">${storeName}</div>
+          ${storeAddress ? `<div>${storeAddress}</div>` : ''}
+          ${storePhone ? `<div>${storePhone}</div>` : ''}
+        </div>
+        <div class="divider"></div>
+        <div>Receipt #: ${sale.receipt_number}</div>
+        <div>Date: ${formatDate(sale.created_at)}</div>
+        ${sale.customer_name ? `<div>Customer: ${sale.customer_name}</div>` : ''}
+        <div class="divider"></div>
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left">Item</th>
+              <th style="text-align:center">Qty</th>
+              <th style="text-align:right">Amount</th>
+            </tr>
+          </thead>
+          <tbody>${itemsHtml}</tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="2">TOTAL</td>
+              <td style="text-align:right">₱${parseFloat(sale.total_amount).toFixed(2)}</td>
+            </tr>
+          </tfoot>
+        </table>
+        <div style="margin-top:6px">Payment: ${(sale.payment_method || 'cash').replace('_', ' ').toUpperCase()}</div>
+        <div class="divider"></div>
+        <div class="footer">
+          <div>Thank you for your purchase!</div>
+          <div>Please keep this receipt for your records.</div>
+        </div>
+      </body>
+      </html>
+    `
+
+    const printWindow = window.open('', '_blank', 'width=400,height=600')
+    if (printWindow) {
+      printWindow.document.write(printHtml)
+      printWindow.document.close()
+      printWindow.focus()
+      printWindow.print()
+      printWindow.close()
+    }
   }
 
   const handleDownload = () => {
