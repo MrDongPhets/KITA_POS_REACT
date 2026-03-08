@@ -147,6 +147,16 @@ export default function StaffPage() {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (!formData.staff_id || !formData.name || !formData.passcode || !formData.store_id) {
+      setError('Please fill in all fields and select a store');
+      return;
+    }
+    if (formData.passcode.length < 4 || formData.passcode.length > 6) {
+      setError('PIN must be 4–6 digits');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
