@@ -18,30 +18,33 @@ const subscriptionPlans = [
     name: 'Free Trial',
     price: 0,
     duration: '14 days',
-    features: ['1 Store', '5 Users', '100 Products', 'Basic Support'],
+    features: ['1 Store', '3 Staff Accounts', '100 Products', 'POS Sales', 'Basic Inventory'],
     icon: <Star className="h-5 w-5" />,
     color: 'bg-green-100 text-green-800',
-    recommended: true
+    recommended: true,
+    disabled: false
   },
   {
     id: 'basic',
     name: 'Basic Plan',
-    price: 29,
+    price: 499,
     duration: 'per month',
-    features: ['3 Stores', '10 Users', '1000 Products', 'Email Support', 'Reports'],
+    features: ['3 Stores', '10 Staff Accounts', '1000 Products', 'POS Sales', 'Inventory & Ingredients', 'Recipe Management', 'Sales & Financial Reports', 'Stock Adjustments'],
     icon: <Zap className="h-5 w-5" />,
     color: 'bg-blue-100 text-blue-800',
-    recommended: false
+    recommended: false,
+    disabled: false
   },
   {
     id: 'pro',
     name: 'Pro Plan',
-    price: 79,
+    price: 999,
     duration: 'per month',
-    features: ['Unlimited Stores', 'Unlimited Users', 'Unlimited Products', 'Priority Support', 'Advanced Analytics'],
+    features: ['Everything in Basic', 'Unlimited Stores', 'Unlimited Staff', 'Unlimited Products', 'Advanced Analytics', 'Priority Support'],
     icon: <Crown className="h-5 w-5" />,
     color: 'bg-purple-100 text-purple-800',
-    recommended: false
+    recommended: false,
+    disabled: true
   }
 ]
 
@@ -465,19 +468,26 @@ export default function RegisterPage() {
                 {subscriptionPlans.map((plan) => (
                   <div
                     key={plan.id}
-                    className={`relative p-6 border rounded-lg cursor-pointer transition-all ${
-                      selectedPlan === plan.id
-                        ? 'border-red-500 bg-red-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                    className={`relative p-6 border rounded-lg transition-all ${
+                      plan.disabled
+                        ? 'border-gray-200 bg-gray-50 opacity-60 cursor-not-allowed'
+                        : selectedPlan === plan.id
+                          ? 'border-red-500 bg-red-50 cursor-pointer'
+                          : 'border-gray-200 hover:border-gray-300 cursor-pointer'
                     }`}
-                    onClick={() => setSelectedPlan(plan.id)}
+                    onClick={() => !plan.disabled && setSelectedPlan(plan.id)}
                   >
                     {plan.recommended && (
                       <Badge className="absolute -top-2 left-4 bg-red-500 text-white">
                         Recommended
                       </Badge>
                     )}
-                    
+                    {plan.disabled && (
+                      <Badge className="absolute -top-2 left-4 bg-gray-400 text-white">
+                        Coming Soon
+                      </Badge>
+                    )}
+
                     <div className="text-center">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 ${plan.color}`}>
                         {plan.icon}
@@ -487,17 +497,17 @@ export default function RegisterPage() {
                         <span className="text-3xl font-bold">₱{plan.price}</span>
                         <span className="text-gray-500 ml-1">/{plan.duration}</span>
                       </div>
-                      <ul className="space-y-2 text-sm">
+                      <ul className="space-y-2 text-sm text-left">
                         {plan.features.map((feature, index) => (
                           <li key={index} className="flex items-center gap-2">
-                            <Check className="h-4 w-4 text-green-500" />
+                            <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                             {feature}
                           </li>
                         ))}
                       </ul>
                     </div>
-                    
-                    {selectedPlan === plan.id && (
+
+                    {selectedPlan === plan.id && !plan.disabled && (
                       <div className="absolute top-4 right-4">
                         <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
                           <Check className="h-4 w-4 text-white" />
