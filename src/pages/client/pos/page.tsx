@@ -296,11 +296,21 @@ export default function POSPage() {
 
       const data = await response.json()
       logger.log('✅ Payment successful:', data.receipt_number)
-      
-      setLastSale(data.sale)
+
+      // Augment sale with cart items for receipt display
+      setLastSale({
+        ...data.sale,
+        sales_items: cart.map(item => ({
+          products: { name: item.name },
+          quantity: item.quantity,
+          unit_price: item.price,
+          total_price: item.price * item.quantity - (item.discount_amount || 0),
+          discount_amount: item.discount_amount || 0
+        }))
+      })
       setShowReceipt(true)
       setShowPayment(false)
-      
+
       // Reset cart
       setCart([])
       setDiscount({ type: null, value: 0 })
