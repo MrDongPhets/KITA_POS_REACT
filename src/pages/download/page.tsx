@@ -21,7 +21,6 @@ import {
 } from "lucide-react"
 
 const EXE_DOWNLOAD_URL = "/KitaPOS-1.0.0.exe"
-const APK_DOWNLOAD_URL = "#" // Replace with actual .apk download URL
 
 export default function DownloadPage() {
   const [androidStepsOpen, setAndroidStepsOpen] = useState(false)
@@ -97,7 +96,7 @@ export default function DownloadPage() {
               </div>
               <div className="flex items-center gap-2">
                 <CardTitle className="text-lg">Android</CardTitle>
-                <Badge variant="secondary" className="text-xs">APK or PWA</Badge>
+                <Badge variant="secondary" className="text-xs">PWA</Badge>
               </div>
               <CardDescription>Install on Android phone or tablet</CardDescription>
             </CardHeader>
@@ -110,15 +109,12 @@ export default function DownloadPage() {
               </ul>
               <Separator />
               <div className="space-y-2">
-                <a href={APK_DOWNLOAD_URL} download>
-                  <Button className="w-full bg-green-600 hover:bg-green-700 gap-2">
-                    <Download className="h-4 w-4" />
-                    Download APK
-                  </Button>
-                </a>
+                <Button variant="outline" className="w-full gap-2" disabled>
+                  <Download className="h-4 w-4" />
+                  APK — Coming Soon
+                </Button>
                 <Button
-                  variant="outline"
-                  className="w-full gap-2"
+                  className="w-full bg-green-600 hover:bg-green-700 gap-2"
                   onClick={() => setAndroidStepsOpen(!androidStepsOpen)}
                 >
                   <Globe className="h-4 w-4" />
