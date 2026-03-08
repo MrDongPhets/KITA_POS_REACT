@@ -3,6 +3,7 @@ import { formatCurrency } from '@/lib/utils'
 import logger from '@/utils/logger';
 
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/ui/app-sidebar"
 import { SimpleStoreSelector } from "@/components/store/SimpleStoreSelector"
@@ -28,15 +29,20 @@ import {
   Building2,
   Store as StoreIcon,
   Copy,
-  Check
+  Check,
+  Clock,
+  CreditCard,
+  AlertTriangle
 } from "lucide-react"
 import API_CONFIG from "@/config/api"
 
 export default function ClientDashboard() {
+  const navigate = useNavigate()
   const [user, setUser] = useState(null)
   const [company, setCompany] = useState(null)
   const [companyCode, setCompanyCode] = useState<string | null>(null)
   const [codeCopied, setCodeCopied] = useState(false)
+  const [subscription, setSubscription] = useState<{ status: string; days_left: number | null } | null>(null)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState(null)
@@ -103,6 +109,12 @@ export default function ClientDashboard() {
       })
       const data = await res.json()
       if (data.company?.company_code) setCompanyCode(data.company.company_code)
+      if (data.company?.subscription_status) {
+        setSubscription({
+          status: data.company.subscription_status,
+          days_left: data.company.days_left
+        })
+      }
     } catch { /* non-critical */ }
   }
 
@@ -122,7 +134,7 @@ export default function ClientDashboard() {
 
       if (response.status === 401 || response.status === 403) {
         const errorData = await response.json()
-        
+
         if (errorData.code === 'TOKEN_EXPIRED' || errorData.code === 'INVALID_TOKEN') {
           localStorage.removeItem('authToken')
           localStorage.removeItem('userData')
@@ -130,7 +142,12 @@ export default function ClientDashboard() {
           localStorage.removeItem('companyData')
           localStorage.removeItem('subscriptionData')
           alert('Your session has expired. Please log in again.')
-          window.location.href = '/login'
+          navigate('/login')
+          return null
+        }
+
+        if (errorData.code === 'SUBSCRIPTION_EXPIRED') {
+          navigate('/client/subscription-expired')
           return null
         }
       }
@@ -321,6 +338,62 @@ export default function ClientDashboard() {
               </div>
             </div>
           )}
+
+          {/* Subscription Banner */}
+          {subscription && (() => {
+            const { status, days_left } = subscription
+            const isExpired = status === 'expired' || (days_left !== null && days_left <= 0)
+            const isUrgent = !isExpired && days_left !== null && days_left <= 7
+            const isWarning = !isExpired && !isUrgent && days_left !== null && days_left <= 30
+
+            if (status === 'active' && days_left !== null && days_left > 30) return null
+
+            const bgClass = isExpired ? 'bg-red-50 border-red-300'
+              : isUrgent ? 'bg-orange-50 border-orange-300'
+              : isWarning ? 'bg-yellow-50 border-yellow-300'
+              : 'bg-green-50 border-green-300'
+
+            const textClass = isExpired ? 'text-red-800'
+              : isUrgent ? 'text-orange-800'
+              : isWarning ? 'text-yellow-800'
+              : 'text-green-800'
+
+            const Icon = isExpired ? AlertTriangle : isUrgent ? AlertTriangle : Clock
+
+            const label = status === 'trial' ? 'Free Trial' : 'Subscription'
+            const message = isExpired
+              ? `Your ${label.toLowerCase()} has expired. Contact us to reactivate your account.`
+              : days_left === 1
+              ? `Your ${label.toLowerCase()} expires tomorrow!`
+              : `Your ${label.toLowerCase()} expires in ${days_left} days.`
+
+            return (
+              <div className={`flex items-center justify-between border rounded-lg px-4 py-3 ${bgClass}`}>
+                <div className={`flex items-center gap-3 ${textClass}`}>
+                  <Icon className="h-5 w-5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-semibold">
+                      {isExpired ? `${label} Expired` : `${label} — ${days_left}d remaining`}
+                    </p>
+                    <p className="text-xs opacity-80">{message}</p>
+                  </div>
+                </div>
+                {isExpired ? (
+                  <button
+                    onClick={() => navigate('/client/subscription-expired')}
+                    className="text-xs px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 whitespace-nowrap"
+                  >
+                    Reactivate
+                  </button>
+                ) : isUrgent ? (
+                  <div className={`flex items-center gap-1 text-xs font-medium ${textClass}`}>
+                    <CreditCard className="h-4 w-4" />
+                    <span>Contact us to subscribe</span>
+                  </div>
+                ) : null}
+              </div>
+            )
+          })()}
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
