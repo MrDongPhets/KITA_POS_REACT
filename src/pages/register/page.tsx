@@ -9,33 +9,33 @@ import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, UserPlus, Building2, ArrowLeft, Check, X, Zap, Crown, ChevronRight } from "lucide-react"
+import { Loader2, UserPlus, Building2, ArrowLeft, Check, X, Zap, Star, ChevronRight } from "lucide-react"
 import API_CONFIG from "@/config/api" // Import API config
 
 const subscriptionPlans = [
   {
     id: 'basic',
     name: 'Basic Plan',
-    price: 499,
+    price: 799,
     duration: 'per month',
     trialDays: 30,
-    features: ['3 Stores', '10 Staff Accounts', '1000 Products', 'POS Sales', 'Inventory & Ingredients', 'Recipe Management', 'Sales & Financial Reports', 'Stock Adjustments'],
+    features: ['1 Store', '5 Staff Accounts', '500 Products', 'POS Sales', 'Inventory & Ingredients', 'Recipe Management', 'Sales Reports', 'Stock Adjustments'],
     icon: <Zap className="h-5 w-5" />,
     color: 'bg-blue-100 text-blue-800',
     recommended: true,
     disabled: false
   },
   {
-    id: 'pro',
-    name: 'Pro Plan',
-    price: 999,
+    id: 'standard',
+    name: 'Standard Plan',
+    price: 1499,
     duration: 'per month',
     trialDays: 0,
-    features: ['Everything in Basic', 'Unlimited Stores', 'Unlimited Staff', 'Unlimited Products', 'Advanced Analytics', 'Priority Support'],
-    icon: <Crown className="h-5 w-5" />,
+    features: ['3 Stores', '20 Staff Accounts', 'Unlimited Products', 'Everything in Basic', 'Financial Reports', 'Stock Transfers', 'Multi-store Management'],
+    icon: <Star className="h-5 w-5" />,
     color: 'bg-purple-100 text-purple-800',
     recommended: false,
-    disabled: true
+    disabled: false
   }
 ]
 

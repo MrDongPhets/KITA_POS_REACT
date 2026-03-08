@@ -27,7 +27,8 @@ export default function SubscriptionExpiredPage() {
             <p className="text-sm text-blue-700">1. Send payment via GCash / bank transfer</p>
             <p className="text-sm text-blue-700">2. Message us your company name + proof of payment</p>
             <p className="text-sm text-blue-700">3. We'll activate your account within the day</p>
-            <p className="text-sm font-semibold text-blue-900 mt-2">Basic Plan: ₱499 / month</p>
+            <p className="text-sm font-semibold text-blue-900 mt-2">Basic Plan: ₱799 / month (1 store)</p>
+            <p className="text-sm font-semibold text-blue-900">Standard Plan: ₱1,499 / month (3 stores)</p>
           </div>
 
           <div className="space-y-3">
