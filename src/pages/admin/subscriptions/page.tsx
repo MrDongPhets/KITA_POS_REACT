@@ -18,6 +18,9 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table"
 import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select"
+import {
   CreditCard, RefreshCw, CheckCircle, XCircle, Clock, Building2, Calendar, Plus
 } from 'lucide-react'
 import { toast } from "sonner"
@@ -41,6 +44,7 @@ export default function AdminSubscriptions() {
   const [selectedCompany, setSelectedCompany] = useState(null)
   const [months, setMonths] = useState(1)
   const [days, setDays] = useState(30)
+  const [activatePlan, setActivatePlan] = useState('basic')
 
   const getAuthHeaders = () => ({
     'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
@@ -73,7 +77,7 @@ export default function AdminSubscriptions() {
       const res = await fetch(`${API_CONFIG.BASE_URL}/admin/subscriptions/activate`, {
         method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify({ company_id: selectedCompany.id, months }),
+        body: JSON.stringify({ company_id: selectedCompany.id, months, plan: activatePlan }),
       })
       const data = await res.json()
       if (res.ok) {
@@ -206,6 +210,7 @@ export default function AdminSubscriptions() {
                     <TableRow>
                       <TableHead>Company</TableHead>
                       <TableHead>Email</TableHead>
+                      <TableHead>Plan</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Trial / Sub End</TableHead>
                       <TableHead>Days Left</TableHead>
@@ -225,6 +230,11 @@ export default function AdminSubscriptions() {
                         <TableRow key={company.id}>
                           <TableCell className="font-medium">{company.name}</TableCell>
                           <TableCell className="text-sm text-gray-600">{company.contact_email}</TableCell>
+                          <TableCell>
+                            <Badge className={company.subscription_plan === 'standard' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}>
+                              {company.subscription_plan === 'standard' ? 'Standard' : 'Basic'}
+                            </Badge>
+                          </TableCell>
                           <TableCell>
                             <Badge className={statusCfg.color}>{statusCfg.label}</Badge>
                           </TableCell>
@@ -257,7 +267,7 @@ export default function AdminSubscriptions() {
                                   size="sm"
                                   className="bg-green-600 hover:bg-green-700 text-white"
                                   disabled={isProcessing}
-                                  onClick={() => { setSelectedCompany(company); setMonths(1); setActivateDialog(true) }}
+                                  onClick={() => { setSelectedCompany(company); setMonths(1); setActivatePlan(company.subscription_plan || 'basic'); setActivateDialog(true) }}
                                 >
                                   <CheckCircle className="h-3 w-3 mr-1" /> Activate
                                 </Button>
@@ -298,6 +308,18 @@ export default function AdminSubscriptions() {
               <p className="text-sm text-gray-600">
                 Activating subscription for <strong>{selectedCompany?.name}</strong>
               </p>
+              <div className="space-y-2">
+                <Label>Plan</Label>
+                <Select value={activatePlan} onValueChange={setActivatePlan}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="basic">Basic — ₱799/mo (1 store)</SelectItem>
+                    <SelectItem value="standard">Standard — ₱1,499/mo (3 stores)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="months">Duration (months)</Label>
                 <Input

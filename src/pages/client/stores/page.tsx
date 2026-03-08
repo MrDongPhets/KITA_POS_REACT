@@ -15,7 +15,7 @@ import {
   Breadcrumb, BreadcrumbItem, BreadcrumbLink,
   BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Plus, Store, MapPin, Phone, CheckCircle, XCircle, Pause, RefreshCw } from 'lucide-react'
+import { Plus, Store, MapPin, Phone, CheckCircle, XCircle, Pause, RefreshCw, AlertCircle } from 'lucide-react'
 import { toast } from "sonner"
 import API_CONFIG from "@/config/api"
 
@@ -23,6 +23,8 @@ export default function ClientStores() {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
   const [stores, setStores] = useState([])
+  const [storeLimit, setStoreLimit] = useState(1)
+  const [plan, setPlan] = useState('basic')
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [showDialog, setShowDialog] = useState(false)
@@ -46,6 +48,8 @@ export default function ClientStores() {
       if (res.ok) {
         const data = await res.json()
         setStores(data.stores || [])
+        setStoreLimit(data.store_limit ?? 1)
+        setPlan(data.plan || 'basic')
       } else {
         toast.error('Failed to fetch stores')
       }
@@ -148,11 +152,21 @@ export default function ClientStores() {
                 <Store className="h-6 w-6 text-blue-600" />
                 My Stores
               </h1>
-              <p className="text-gray-600 mt-1">{stores.length} store{stores.length !== 1 ? 's' : ''}</p>
+              <p className="text-gray-600 mt-1">
+                {stores.length} / {storeLimit} store{storeLimit !== 1 ? 's' : ''} used
+                <span className="ml-2 text-xs text-gray-400 capitalize">({plan} plan)</span>
+              </p>
             </div>
+            <div className="flex flex-col items-end gap-2">
+              {stores.length >= storeLimit && (
+                <div className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+                  <AlertCircle className="h-3 w-3" />
+                  {plan === 'basic' ? 'Upgrade to Standard for 3 stores' : 'Store limit reached'}
+                </div>
+              )}
             <Dialog open={showDialog} onOpenChange={setShowDialog}>
               <DialogTrigger asChild>
-                <Button>
+                <Button disabled={stores.length >= storeLimit}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add Store
                 </Button>
@@ -200,6 +214,7 @@ export default function ClientStores() {
                 </form>
               </DialogContent>
             </Dialog>
+            </div>
           </div>
 
           {/* Stats */}
@@ -240,7 +255,7 @@ export default function ClientStores() {
                 <Store className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="text-lg font-medium mb-2">No stores yet</h3>
                 <p className="text-muted-foreground mb-4">Create your first store to get started.</p>
-                <Button onClick={() => setShowDialog(true)}>
+                <Button onClick={() => setShowDialog(true)} disabled={stores.length >= storeLimit}>
                   <Plus className="w-4 h-4 mr-2" />
                   Create First Store
                 </Button>
