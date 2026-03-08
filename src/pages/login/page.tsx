@@ -357,6 +357,15 @@ function LoginForm() {
         </div>
       )}
 
+      {/* Get the App link — browser only */}
+      {!isNativeApp && (
+        <div className="mt-4 w-full max-w-md text-center">
+          <Link to="/download" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            📱 Get the App
+          </Link>
+        </div>
+      )}
+
       {/* Footer */}
       <div className="mt-6 text-center">
         <p className="text-xs text-gray-500">

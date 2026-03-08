@@ -1,0 +1,221 @@
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import {
+  Monitor,
+  Smartphone,
+  Apple,
+  Download,
+  Globe,
+  CheckCircle,
+  ArrowLeft,
+  Chrome,
+  Share2,
+  PlusSquare,
+  Building2,
+  Wifi,
+  HardDrive,
+  Zap
+} from "lucide-react"
+
+const EXE_DOWNLOAD_URL = "/KitaPOS-1.0.0.exe"
+const APK_DOWNLOAD_URL = "#" // Replace with actual .apk download URL
+
+export default function DownloadPage() {
+  const [iosStepsOpen, setIosStepsOpen] = useState(false)
+  const [androidStepsOpen, setAndroidStepsOpen] = useState(false)
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-red-500 rounded-lg flex items-center justify-center">
+              <Building2 className="h-5 w-5 text-white" />
+            </div>
+            <span className="font-bold text-gray-900 text-lg">KitaPOS</span>
+          </div>
+          <Link to="/login">
+            <Button variant="outline" size="sm" className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Login
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* Hero */}
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">Get KitaPOS</h1>
+          <p className="text-gray-500 text-lg max-w-xl mx-auto">
+            Install KitaPOS on your device for the best experience. Available on Windows, Android, and iOS.
+          </p>
+        </div>
+
+        {/* Download Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+          {/* Windows Desktop */}
+          <Card className="border-2 hover:border-blue-300 transition-colors">
+            <CardHeader className="pb-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3">
+                <Monitor className="h-6 w-6 text-blue-600" />
+              </div>
+              <CardTitle className="text-lg">Windows Desktop</CardTitle>
+              <CardDescription>Full offline-capable app for Windows PC</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <ul className="space-y-2 text-sm text-gray-600">
+                <Feature icon={<HardDrive className="h-3.5 w-3.5" />} text="Works offline (no internet needed)" />
+                <Feature icon={<Zap className="h-3.5 w-3.5" />} text="Fast & lightweight" />
+                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Bluetooth printer support" />
+                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Barcode scanner support" />
+              </ul>
+              <Separator />
+              <a href={EXE_DOWNLOAD_URL} download>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 gap-2">
+                  <Download className="h-4 w-4" />
+                  Download .exe
+                </Button>
+              </a>
+              <p className="text-xs text-gray-400 text-center">Windows 10 / 11 · 64-bit</p>
+            </CardContent>
+          </Card>
+
+          {/* Android */}
+          <Card className="border-2 hover:border-green-300 transition-colors">
+            <CardHeader className="pb-3">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-3">
+                <Smartphone className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-lg">Android</CardTitle>
+                <Badge variant="secondary" className="text-xs">APK or PWA</Badge>
+              </div>
+              <CardDescription>Install on Android phone or tablet</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <ul className="space-y-2 text-sm text-gray-600">
+                <Feature icon={<Wifi className="h-3.5 w-3.5" />} text="Requires internet connection" />
+                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Works on phone & tablet" />
+                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Staff login supported" />
+                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Add to Home Screen" />
+              </ul>
+              <Separator />
+              <div className="space-y-2">
+                <a href={APK_DOWNLOAD_URL} download>
+                  <Button className="w-full bg-green-600 hover:bg-green-700 gap-2">
+                    <Download className="h-4 w-4" />
+                    Download APK
+                  </Button>
+                </a>
+                <Button
+                  variant="outline"
+                  className="w-full gap-2"
+                  onClick={() => setAndroidStepsOpen(!androidStepsOpen)}
+                >
+                  <Globe className="h-4 w-4" />
+                  Install as Web App (PWA)
+                </Button>
+              </div>
+              {androidStepsOpen && (
+                <div className="bg-green-50 rounded-lg p-3 space-y-2 text-sm text-green-800">
+                  <p className="font-medium">Steps (Chrome):</p>
+                  <ol className="space-y-1 list-decimal list-inside">
+                    <li>Open this website in <strong>Chrome</strong></li>
+                    <li>Tap the <strong>⋮ menu</strong> (top right)</li>
+                    <li>Tap <strong>"Add to Home screen"</strong></li>
+                    <li>Tap <strong>Add</strong> to confirm</li>
+                  </ol>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* iPhone / iPad */}
+          <Card className="border-2 hover:border-gray-300 transition-colors">
+            <CardHeader className="pb-3">
+              <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-3">
+                <Apple className="h-6 w-6 text-gray-700" />
+              </div>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-lg">iPhone / iPad</CardTitle>
+                <Badge variant="secondary" className="text-xs">PWA</Badge>
+              </div>
+              <CardDescription>Install on iOS via Safari browser</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <ul className="space-y-2 text-sm text-gray-600">
+                <Feature icon={<Wifi className="h-3.5 w-3.5" />} text="Requires internet connection" />
+                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Works on iPhone & iPad" />
+                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Staff login supported" />
+                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Add to Home Screen" />
+              </ul>
+              <Separator />
+              <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => setIosStepsOpen(!iosStepsOpen)}
+              >
+                <Share2 className="h-4 w-4" />
+                How to Install on iOS
+              </Button>
+              {iosStepsOpen && (
+                <div className="bg-gray-50 rounded-lg p-3 space-y-2 text-sm text-gray-700">
+                  <p className="font-medium">Steps (Safari only):</p>
+                  <ol className="space-y-1 list-decimal list-inside">
+                    <li>Open this website in <strong>Safari</strong></li>
+                    <li>Tap the <strong>Share</strong> button <span className="text-gray-500">(box with arrow)</span></li>
+                    <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+                    <li>Tap <strong>Add</strong> to confirm</li>
+                  </ol>
+                  <p className="text-xs text-gray-400 mt-1">⚠️ Does not work in Chrome on iOS</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Web App Option */}
+        <Card className="bg-blue-50 border-blue-200 mb-8">
+          <CardContent className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                <Chrome className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="font-medium text-blue-900">Just want to use the browser?</p>
+                <p className="text-sm text-blue-700">No installation needed — log in directly from any browser.</p>
+              </div>
+            </div>
+            <Link to="/login">
+              <Button className="bg-blue-600 hover:bg-blue-700 shrink-0 gap-2">
+                <Globe className="h-4 w-4" />
+                Open Web App
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Footer */}
+        <div className="text-center text-xs text-gray-400">
+          <p>KitaPOS v2.0.0 · © 2025 Mustard Digitals</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Feature({ icon, text }: { icon: React.ReactNode; text: string }) {
+  return (
+    <li className="flex items-center gap-2">
+      <span className="text-gray-400 shrink-0">{icon}</span>
+      <span>{text}</span>
+    </li>
+  )
+}

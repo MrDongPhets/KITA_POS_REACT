@@ -10,6 +10,7 @@ import LoginPage from '@/pages/login/page'
 import RegisterPage from '@/pages/register/page'
 import SystemAdminPage from '@/pages/system-admin/page'
 import StaffLoginPage from '@/pages/staff/login/page'
+import DownloadPage from '@/pages/download/page'
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/dashboard/page'
@@ -53,6 +54,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/system-admin" element={<SystemAdminPage />} />
         <Route path="/staff/login" element={<StaffLoginPage />} />
+        <Route path="/download" element={<DownloadPage />} />
 
         {/* Admin routes */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
