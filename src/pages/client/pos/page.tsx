@@ -2,7 +2,7 @@
 import logger from '@/utils/logger';
 
 import { useState, useEffect } from 'react'
-import { ShoppingCart, Package, DollarSign, ArrowLeft, LogOut } from 'lucide-react'
+import { ArrowLeft, LogOut } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
@@ -24,7 +24,6 @@ import { Store as StoreIcon } from "lucide-react"
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/components/auth/AuthProvider'
 import API_CONFIG from '@/config/api'
-import { formatCurrency } from '@/lib/utils'
 
 export default function POSPage() {
   const { toast } = useToast()
@@ -47,13 +46,6 @@ export default function POSPage() {
   const [showReceipt, setShowReceipt] = useState(false)
   const [lastSale, setLastSale] = useState(null)
   
-  // Stats
-  const [todayStats, setTodayStats] = useState({
-    sales: 0,
-    total: 0,
-    items: 0
-  })
-
   // ✅ Helper function for API calls
   const getAuthHeaders = () => ({
     'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
@@ -68,7 +60,6 @@ export default function POSPage() {
     if (selectedStore) {
       fetchCategories()
       fetchProducts()
-      fetchTodayStats()
     }
   }, [selectedStore, selectedCategory])
 
@@ -142,33 +133,6 @@ export default function POSPage() {
       })
     } finally {
       setLoading(false)
-    }
-  }
-
-  const fetchTodayStats = async () => {
-    if (!selectedStore) return
-    
-    try {
-      logger.log('📊 Fetching today stats for store:', selectedStore.id)
-      
-      const response = await fetch(`${API_CONFIG.BASE_URL}/pos/sales/today?store_id=${selectedStore.id}`, {
-        headers: getAuthHeaders()
-      })
-      
-      if (!response.ok) {
-        logger.error('❌ Today stats fetch failed:', response.status)
-        return
-      }
-      
-      const data = await response.json()
-      logger.log('✅ Today stats:', data)
-      setTodayStats({
-        sales: data.count || 0,
-        total: data.total || 0,
-        items: data.sales?.reduce((sum, sale) => sum + sale.items_count, 0) || 0
-      })
-    } catch (error) {
-      logger.error('Fetch today stats error:', error)
     }
   }
 
@@ -340,10 +304,7 @@ export default function POSPage() {
       // Reset cart
       setCart([])
       setDiscount({ type: null, value: 0 })
-      
-      // Refresh stats
-      fetchTodayStats()
-      
+
       toast({
         title: "Sale Completed",
         description: `Receipt: ${data.receipt_number}`
@@ -399,102 +360,56 @@ export default function POSPage() {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="bg-white border-b px-4 py-3">
+        <div className="flex items-center gap-3">
           {isStaff ? (
-            <Button variant="outline" size="sm" className="gap-2" onClick={logout}>
+            <Button variant="outline" size="sm" className="gap-2 shrink-0" onClick={logout}>
               <LogOut className="h-4 w-4" />
               Logout
             </Button>
           ) : (
             <Link to="/client/dashboard">
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 shrink-0">
                 <ArrowLeft className="h-4 w-4" />
                 Dashboard
               </Button>
             </Link>
           )}
-          <div>
-            <h1 className="text-2xl font-bold">Point of Sale</h1>
-            <div className="flex items-center gap-2 mt-1">
-              {/* ✅ ADD STORE SELECTOR */}
-              <Select 
-                value={selectedStore?.id} 
-                onValueChange={(storeId) => {
-                  const store = stores.find(s => s.id === storeId)
-                  if (store) {
-                    setSelectedStore(store)
-                    logger.log('🔄 Switched to store:', store.name)
-                  }
-                }}
-              >
-                <SelectTrigger className="w-[250px] h-8 text-sm">
-                  <StoreIcon className="h-3 w-3 mr-2" />
-                  <SelectValue placeholder="Select store" />
-                </SelectTrigger>
-                <SelectContent>
-                  {stores.map((store) => (
-                    <SelectItem key={store.id} value={store.id}>
-                      <div className="flex items-center gap-2">
-                        <StoreIcon className="h-3 w-3" />
-                        <span>{store.name}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-        
-        {/* Today Stats */}
-        <div className="flex gap-4">
-          <Card className="bg-blue-50 border-blue-200">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <ShoppingCart className="h-4 w-4 text-blue-600" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Today's Sales</p>
-                  <p className="text-lg font-bold">{todayStats.sales}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-green-50 border-green-200">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-green-600" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Today's Revenue</p>
-                  <p className="text-lg font-bold">{formatCurrency(todayStats.total)}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-purple-50 border-purple-200">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <Package className="h-4 w-4 text-purple-600" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Items Sold</p>
-                  <p className="text-lg font-bold">{todayStats.items}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <h1 className="text-xl font-bold">Point of Sale</h1>
+          <Select
+            value={selectedStore?.id}
+            onValueChange={(storeId) => {
+              const store = stores.find(s => s.id === storeId)
+              if (store) {
+                setSelectedStore(store)
+                logger.log('🔄 Switched to store:', store.name)
+              }
+            }}
+          >
+            <SelectTrigger className="w-[200px] h-8 text-sm">
+              <StoreIcon className="h-3 w-3 mr-1 shrink-0" />
+              <SelectValue placeholder="Select store" />
+            </SelectTrigger>
+            <SelectContent>
+              {stores.map((store) => (
+                <SelectItem key={store.id} value={store.id}>
+                  <div className="flex items-center gap-2">
+                    <StoreIcon className="h-3 w-3" />
+                    <span>{store.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
-    </div>
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel - Products */}
-        <div className="flex-1 p-6 overflow-auto">
+        <div className="flex-1 p-4 overflow-auto min-w-0">
           {/* Search */}
-          <ProductSearch 
+          <ProductSearch
             onSearch={handleSearch}
             searchQuery={searchQuery}
           />
@@ -515,7 +430,7 @@ export default function POSPage() {
         </div>
 
         {/* Right Panel - Cart */}
-        <div className="w-96 bg-white border-l shadow-lg">
+        <div className="w-80 xl:w-96 bg-white border-l shadow-lg shrink-0 h-full overflow-hidden">
           <Cart
             items={cart}
             onUpdateQuantity={updateQuantity}

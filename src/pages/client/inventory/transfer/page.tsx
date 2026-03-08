@@ -285,8 +285,7 @@ export default function InventoryTransferPage() {
             
             <div className="flex gap-2">
               <Button variant="outline" onClick={fetchTransfers} disabled={loading}>
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                Refresh
+                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
               </Button>
               
               <Dialog open={showDialog} onOpenChange={setShowDialog}>

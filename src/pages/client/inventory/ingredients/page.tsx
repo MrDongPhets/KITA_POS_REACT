@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/ui/app-sidebar"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -331,10 +331,8 @@ export default function IngredientsPage() {
               onClick={handleRefresh}
               disabled={refreshing}
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh
+              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </Button>
-            <AddIngredientModal onIngredientAdded={handleIngredientAdded} />
           </div>
         </header>
 
@@ -452,6 +450,12 @@ export default function IngredientsPage() {
 
           {/* Ingredients Table */}
           <Card>
+            <CardHeader>
+              <div className="flex flex-wrap justify-between items-center gap-2">
+                <CardTitle>Ingredients List</CardTitle>
+                <AddIngredientModal onIngredientAdded={handleIngredientAdded} />
+              </div>
+            </CardHeader>
             <CardContent className="p-0">
               {loading ? (
                 <div className="flex items-center justify-center py-8">

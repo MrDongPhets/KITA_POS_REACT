@@ -312,114 +312,6 @@ export default function StaffPage() {
                   Activity Logs
                 </Button>
 
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="flex items-center gap-2">
-                      <Plus className="h-4 w-4" />
-                      Add Staff
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add New Staff Member</DialogTitle>
-                      <DialogDescription>
-                        Create a new staff account with PIN-based login
-                      </DialogDescription>
-                    </DialogHeader>
-
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="staff_id">Staff ID</Label>
-                        <Input
-                          id="staff_id"
-                          placeholder="STF001"
-                          value={formData.staff_id}
-                          onChange={(e) => setFormData({ ...formData, staff_id: e.target.value })}
-                          required
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Full Name</Label>
-                        <Input
-                          id="name"
-                          placeholder="John Doe"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          required
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="store_id">Store</Label>
-                        <Select
-                          value={formData.store_id}
-                          onValueChange={(value) => setFormData({ ...formData, store_id: value })}
-                          required
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select store" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {stores.map(store => (
-                              <SelectItem key={store.id} value={store.id}>
-                                {store.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="passcode">PIN Code (4-6 digits)</Label>
-                        <Input
-                          id="passcode"
-                          type="password"
-                          placeholder="1234"
-                          maxLength={6}
-                          value={formData.passcode}
-                          onChange={(e) => setFormData({ ...formData, passcode: e.target.value.replace(/\D/g, '') })}
-                          required
-                        />
-                        <p className="text-xs text-gray-500">Staff will use this PIN to login to POS</p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="role">Role</Label>
-                        <Select
-                          value={formData.role}
-                          onValueChange={(value) => setFormData({ ...formData, role: value })}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="staff">Staff</SelectItem>
-                            <SelectItem value="supervisor">Supervisor</SelectItem>
-                            <SelectItem value="manager">Manager</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {error && (
-                        <Alert variant="destructive">
-                          <AlertCircle className="h-4 w-4" />
-                          <AlertDescription>{error}</AlertDescription>
-                        </Alert>
-                      )}
-
-                      <div className="flex gap-2">
-                        <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} className="flex-1">
-                          Cancel
-                        </Button>
-                        <Button type="submit" disabled={submitting} className="flex-1">
-                          {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                          {submitting ? 'Creating...' : 'Create Staff'}
-                        </Button>
-                      </div>
-                    </form>
-                  </DialogContent>
-                </Dialog>
               </div>
             </div>
 
@@ -466,10 +358,84 @@ export default function StaffPage() {
             {/* Staff List */}
             <Card>
               <CardHeader>
-                <CardTitle>Team Members</CardTitle>
-                <CardDescription>
-                  Manage staff accounts and their permission levels
-                </CardDescription>
+                <div className="flex flex-wrap justify-between items-center gap-2">
+                  <div>
+                    <CardTitle>Team Members</CardTitle>
+                    <CardDescription>
+                      Manage staff accounts and their permission levels
+                    </CardDescription>
+                  </div>
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="flex items-center gap-2">
+                        <Plus className="h-4 w-4" />
+                        Add Staff
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add New Staff Member</DialogTitle>
+                        <DialogDescription>
+                          Create a new staff account with PIN-based login
+                        </DialogDescription>
+                      </DialogHeader>
+                      <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="staff_id">Staff ID</Label>
+                          <Input id="staff_id" placeholder="STF001" value={formData.staff_id}
+                            onChange={(e) => setFormData({ ...formData, staff_id: e.target.value })} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="name">Full Name</Label>
+                          <Input id="name" placeholder="John Doe" value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="store_id">Store</Label>
+                          <Select value={formData.store_id} onValueChange={(value) => setFormData({ ...formData, store_id: value })} required>
+                            <SelectTrigger><SelectValue placeholder="Select store" /></SelectTrigger>
+                            <SelectContent>
+                              {stores.map(store => (
+                                <SelectItem key={store.id} value={store.id}>{store.name}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="passcode">PIN Code (4-6 digits)</Label>
+                          <Input id="passcode" type="password" placeholder="1234" maxLength={6}
+                            value={formData.passcode}
+                            onChange={(e) => setFormData({ ...formData, passcode: e.target.value.replace(/\D/g, '') })} required />
+                          <p className="text-xs text-gray-500">Staff will use this PIN to login to POS</p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="role">Role</Label>
+                          <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="staff">Staff</SelectItem>
+                              <SelectItem value="supervisor">Supervisor</SelectItem>
+                              <SelectItem value="manager">Manager</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        {error && (
+                          <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertDescription>{error}</AlertDescription>
+                          </Alert>
+                        )}
+                        <div className="flex gap-2">
+                          <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} className="flex-1">Cancel</Button>
+                          <Button type="submit" disabled={submitting} className="flex-1">
+                            {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                            {submitting ? 'Creating...' : 'Create Staff'}
+                          </Button>
+                        </div>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </CardHeader>
               <CardContent>
                 {filteredStaff.length === 0 ? (

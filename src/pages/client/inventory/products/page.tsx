@@ -417,10 +417,8 @@ export default function ProductsPage() {
               loading={false}
             />
             <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
-              <RefreshCw className={`mr-1 h-3 w-3 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh
+              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </Button>
-            <AddProductModal onProductAdded={handleProductAdded} />
           </div>
         </header>
 
@@ -505,9 +503,10 @@ export default function ProductsPage() {
 
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <CardTitle>Products List</CardTitle>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap justify-end items-center gap-2">
+                  <AddProductModal onProductAdded={handleProductAdded} />
                   <div className="relative">
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
                     <Input

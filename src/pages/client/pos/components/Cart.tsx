@@ -4,7 +4,6 @@ import { formatCurrency } from '@/lib/utils'
 import { ShoppingCart, Trash2, Plus, Minus, Percent, CreditCard } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import CartItem from './CartItem'
 
@@ -45,7 +44,7 @@ export default function Cart({
       </CardHeader>
 
       {/* Cart Items */}
-      <ScrollArea className="flex-1">
+      <div className="flex-1 overflow-y-auto min-h-0">
         <CardContent className="p-4">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -66,7 +65,7 @@ export default function Cart({
             </div>
           )}
         </CardContent>
-      </ScrollArea>
+      </div>
 
       {/* Summary */}
       {items.length > 0 && (

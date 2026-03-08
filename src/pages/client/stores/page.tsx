@@ -136,9 +136,20 @@ export default function ClientStores() {
           </div>
           <div className="ml-auto px-4 flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh
+              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </Button>
+          </div>
+        </header>
+
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
+                <Store className="h-6 w-6 text-blue-600" />
+                My Stores
+              </h1>
+              <p className="text-gray-600 mt-1">{stores.length} store{stores.length !== 1 ? 's' : ''}</p>
+            </div>
             <Dialog open={showDialog} onOpenChange={setShowDialog}>
               <DialogTrigger asChild>
                 <Button>
@@ -189,18 +200,6 @@ export default function ClientStores() {
                 </form>
               </DialogContent>
             </Dialog>
-          </div>
-        </header>
-
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
-                <Store className="h-6 w-6 text-blue-600" />
-                My Stores
-              </h1>
-              <p className="text-gray-600 mt-1">{stores.length} store{stores.length !== 1 ? 's' : ''}</p>
-            </div>
           </div>
 
           {/* Stats */}

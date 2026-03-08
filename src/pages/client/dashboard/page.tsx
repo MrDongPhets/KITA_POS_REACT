@@ -287,8 +287,7 @@ export default function ClientDashboard() {
               onClick={handleRefresh}
               disabled={refreshing}
             >
-              <RefreshCw className={`mr-1 h-3 w-3 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh
+              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </Button>
           </div>
         </header>

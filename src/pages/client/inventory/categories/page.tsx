@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/ui/app-sidebar"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -209,10 +209,8 @@ export default function CategoriesPage() {
               onClick={fetchCategories}
               disabled={loading}
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             </Button>
-            <AddCategoryModal onCategoryAdded={handleCategoryAdded} />
           </div>
         </header>
 
@@ -299,6 +297,12 @@ export default function CategoriesPage() {
 
           {/* Categories Grid */}
           <Card>
+            <CardHeader>
+              <div className="flex flex-wrap justify-between items-center gap-2">
+                <CardTitle>Categories</CardTitle>
+                <AddCategoryModal onCategoryAdded={handleCategoryAdded} />
+              </div>
+            </CardHeader>
             <CardContent className="p-0">
               {filteredCategories.length === 0 ? (
                 <div className="text-center py-12">
