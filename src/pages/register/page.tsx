@@ -9,30 +9,20 @@ import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, UserPlus, Building2, ArrowLeft, Check, X, Star, Zap, Crown, ChevronRight } from "lucide-react"
+import { Loader2, UserPlus, Building2, ArrowLeft, Check, X, Zap, Crown, ChevronRight } from "lucide-react"
 import API_CONFIG from "@/config/api" // Import API config
 
 const subscriptionPlans = [
-  {
-    id: 'trial',
-    name: 'Free Trial',
-    price: 0,
-    duration: '14 days',
-    features: ['1 Store', '3 Staff Accounts', '100 Products', 'POS Sales', 'Basic Inventory'],
-    icon: <Star className="h-5 w-5" />,
-    color: 'bg-green-100 text-green-800',
-    recommended: true,
-    disabled: false
-  },
   {
     id: 'basic',
     name: 'Basic Plan',
     price: 499,
     duration: 'per month',
+    trialDays: 30,
     features: ['3 Stores', '10 Staff Accounts', '1000 Products', 'POS Sales', 'Inventory & Ingredients', 'Recipe Management', 'Sales & Financial Reports', 'Stock Adjustments'],
     icon: <Zap className="h-5 w-5" />,
     color: 'bg-blue-100 text-blue-800',
-    recommended: false,
+    recommended: true,
     disabled: false
   },
   {
@@ -40,6 +30,7 @@ const subscriptionPlans = [
     name: 'Pro Plan',
     price: 999,
     duration: 'per month',
+    trialDays: 0,
     features: ['Everything in Basic', 'Unlimited Stores', 'Unlimited Staff', 'Unlimited Products', 'Advanced Analytics', 'Priority Support'],
     icon: <Crown className="h-5 w-5" />,
     color: 'bg-purple-100 text-purple-800',
@@ -74,7 +65,7 @@ export default function RegisterPage() {
   })
 
   // Selected subscription plan
-  const [selectedPlan, setSelectedPlan] = useState('trial')
+  const [selectedPlan, setSelectedPlan] = useState('basic')
 
   // Password strength validation
   const [passwordStrength, setPasswordStrength] = useState({
@@ -464,11 +455,11 @@ export default function RegisterPage() {
                 <p className="text-gray-600">Select a subscription plan that fits your business</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto w-full">
                 {subscriptionPlans.map((plan) => (
                   <div
                     key={plan.id}
-                    className={`relative p-6 border rounded-lg transition-all ${
+                    className={`relative p-6 border-2 rounded-lg transition-all ${
                       plan.disabled
                         ? 'border-gray-200 bg-gray-50 opacity-60 cursor-not-allowed'
                         : selectedPlan === plan.id
@@ -478,8 +469,8 @@ export default function RegisterPage() {
                     onClick={() => !plan.disabled && setSelectedPlan(plan.id)}
                   >
                     {plan.recommended && (
-                      <Badge className="absolute -top-2 left-4 bg-red-500 text-white">
-                        Recommended
+                      <Badge className="absolute -top-2 left-4 bg-green-500 text-white">
+                        1 Month Free
                       </Badge>
                     )}
                     {plan.disabled && (
@@ -492,7 +483,12 @@ export default function RegisterPage() {
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 ${plan.color}`}>
                         {plan.icon}
                       </div>
-                      <h3 className="font-semibold text-lg mb-2">{plan.name}</h3>
+                      <h3 className="font-semibold text-lg mb-1">{plan.name}</h3>
+                      {plan.trialDays > 0 && (
+                        <p className="text-xs text-green-600 font-medium mb-3">
+                          {plan.trialDays} days free, then ₱{plan.price}/{plan.duration}
+                        </p>
+                      )}
                       <div className="mb-4">
                         <span className="text-3xl font-bold">₱{plan.price}</span>
                         <span className="text-gray-500 ml-1">/{plan.duration}</span>
