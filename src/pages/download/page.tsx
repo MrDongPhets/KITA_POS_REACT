@@ -13,7 +13,6 @@ import {
   CheckCircle,
   ArrowLeft,
   Chrome,
-  Share2,
   PlusSquare,
   Building2,
   Wifi,
@@ -25,7 +24,6 @@ const EXE_DOWNLOAD_URL = "/KitaPOS-1.0.0.exe"
 const APK_DOWNLOAD_URL = "#" // Replace with actual .apk download URL
 
 export default function DownloadPage() {
-  const [iosStepsOpen, setIosStepsOpen] = useState(false)
   const [androidStepsOpen, setAndroidStepsOpen] = useState(false)
 
   return (
@@ -84,6 +82,10 @@ export default function DownloadPage() {
                 </Button>
               </a>
               <p className="text-xs text-gray-400 text-center">Windows 10 / 11 · 64-bit</p>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-xs text-yellow-800">
+                <p className="font-medium mb-1">⚠️ Windows SmartScreen warning?</p>
+                <p>Click <strong>"More info"</strong> → <strong>"Run anyway"</strong> to install. This is safe — the app is not yet signed with a paid certificate.</p>
+              </div>
             </CardContent>
           </Card>
 
@@ -138,45 +140,28 @@ export default function DownloadPage() {
           </Card>
 
           {/* iPhone / iPad */}
-          <Card className="border-2 hover:border-gray-300 transition-colors">
+          <Card className="border-2 border-dashed border-gray-200 opacity-70">
             <CardHeader className="pb-3">
               <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-3">
-                <Apple className="h-6 w-6 text-gray-700" />
+                <Apple className="h-6 w-6 text-gray-400" />
               </div>
               <div className="flex items-center gap-2">
-                <CardTitle className="text-lg">iPhone / iPad</CardTitle>
-                <Badge variant="secondary" className="text-xs">PWA</Badge>
+                <CardTitle className="text-lg text-gray-400">iPhone / iPad</CardTitle>
+                <Badge variant="outline" className="text-xs text-gray-400 border-gray-300">Coming Soon</Badge>
               </div>
-              <CardDescription>Install on iOS via Safari browser</CardDescription>
+              <CardDescription>iOS app is currently in development</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <ul className="space-y-2 text-sm text-gray-600">
-                <Feature icon={<Wifi className="h-3.5 w-3.5" />} text="Requires internet connection" />
+              <ul className="space-y-2 text-sm text-gray-400">
                 <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Works on iPhone & iPad" />
                 <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Staff login supported" />
                 <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Add to Home Screen" />
               </ul>
               <Separator />
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => setIosStepsOpen(!iosStepsOpen)}
-              >
-                <Share2 className="h-4 w-4" />
-                How to Install on iOS
+              <Button variant="outline" className="w-full gap-2" disabled>
+                <Apple className="h-4 w-4" />
+                Coming Soon
               </Button>
-              {iosStepsOpen && (
-                <div className="bg-gray-50 rounded-lg p-3 space-y-2 text-sm text-gray-700">
-                  <p className="font-medium">Steps (Safari only):</p>
-                  <ol className="space-y-1 list-decimal list-inside">
-                    <li>Open this website in <strong>Safari</strong></li>
-                    <li>Tap the <strong>Share</strong> button <span className="text-gray-500">(box with arrow)</span></li>
-                    <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
-                    <li>Tap <strong>Add</strong> to confirm</li>
-                  </ol>
-                  <p className="text-xs text-gray-400 mt-1">⚠️ Does not work in Chrome on iOS</p>
-                </div>
-              )}
             </CardContent>
           </Card>
         </div>
