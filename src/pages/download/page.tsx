@@ -17,6 +17,7 @@ import {
   Building2,
   Wifi,
   HardDrive,
+  Laptop,
   Zap
 } from "lucide-react"
 
@@ -106,51 +107,87 @@ export default function DownloadPage() {
   </Card>
 
           {/* Android */}
-          <Card className="border-2 hover:border-green-300 transition-colors">
-            <CardHeader className="pb-3">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-3">
-                <Smartphone className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="flex items-center gap-2">
-                <CardTitle className="text-lg">Android</CardTitle>
-                <Badge variant="secondary" className="text-xs">PWA</Badge>
-              </div>
-              <CardDescription>Install on Android phone or tablet</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2 text-sm text-gray-600">
-                <Feature icon={<Wifi className="h-3.5 w-3.5" />} text="Requires internet connection" />
-                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Works on phone & tablet" />
-                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Staff login supported" />
-                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Add to Home Screen" />
-              </ul>
-              <Separator />
-              <div className="space-y-2">
-                <Button variant="outline" className="w-full gap-2" disabled>
-                  <Download className="h-4 w-4" />
-                  APK — Coming Soon
-                </Button>
-                <Button
-                  className="w-full bg-green-600 hover:bg-green-700 gap-2"
-                  onClick={() => setAndroidStepsOpen(!androidStepsOpen)}
-                >
-                  <Globe className="h-4 w-4" />
-                  Install as Web App (PWA)
-                </Button>
-              </div>
-              {androidStepsOpen && (
-                <div className="bg-green-50 rounded-lg p-3 space-y-2 text-sm text-green-800">
-                  <p className="font-medium">Steps (Chrome):</p>
-                  <ol className="space-y-1 list-decimal list-inside">
-                    <li>Open this website in <strong>Chrome</strong></li>
-                    <li>Tap the <strong>⋮ menu</strong> (top right)</li>
-                    <li>Tap <strong>"Add to Home screen"</strong></li>
-                    <li>Tap <strong>Add</strong> to confirm</li>
-                  </ol>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+<Card className="border-2 hover:border-green-300 transition-colors">
+  <CardHeader className="pb-3">
+    <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-3">
+      <Smartphone className="h-6 w-6 text-green-600" />
+    </div>
+    <div className="flex items-center gap-2">
+      <CardTitle className="text-lg">Android & Desktop</CardTitle>
+      <Badge variant="secondary" className="text-xs">PWA</Badge>
+    </div>
+    <CardDescription>Install on Android, Windows, or Mac via browser</CardDescription>
+  </CardHeader>
+  <CardContent className="space-y-4">
+    <ul className="space-y-2 text-sm text-gray-600">
+      <Feature icon={<Wifi className="h-3.5 w-3.5" />} text="Requires internet connection" />
+      <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Works on phone, tablet & desktop" />
+      <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Staff login supported" />
+      <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Installable from any browser" />
+    </ul>
+    <Separator />
+    <div className="space-y-2">
+      <Button variant="outline" className="w-full gap-2" disabled>
+        <Download className="h-4 w-4" />
+        APK — Coming Soon
+      </Button>
+      <Button
+        className="w-full bg-green-600 hover:bg-green-700 gap-2"
+        onClick={() => setAndroidStepsOpen(!androidStepsOpen)}
+      >
+        <Globe className="h-4 w-4" />
+        {androidStepsOpen ? 'Hide Install Guide' : 'How to Install (PWA)'}
+      </Button>
+    </div>
+
+    {androidStepsOpen && (
+      <div className="space-y-3 text-sm">
+
+        {/* Android */}
+        <div className="bg-green-50 rounded-lg p-3 space-y-2 text-green-800">
+          <p className="font-semibold flex items-center gap-2">
+            <Smartphone className="h-4 w-4" /> Android (Chrome)
+          </p>
+          <ol className="space-y-1 list-decimal list-inside">
+            <li>Open the app in <strong>Chrome</strong></li>
+            <li>Tap the <strong>⋮ menu</strong> (top right)</li>
+            <li>Tap <strong>"Add to Home screen"</strong></li>
+            <li>Tap <strong>Add</strong> to confirm</li>
+          </ol>
+        </div>
+
+        {/* Windows */}
+        <div className="bg-blue-50 rounded-lg p-3 space-y-2 text-blue-800">
+          <p className="font-semibold flex items-center gap-2">
+            <Monitor className="h-4 w-4" /> Windows (Chrome / Edge)
+          </p>
+          <ol className="space-y-1 list-decimal list-inside">
+            <li>Open the app in <strong>Chrome</strong> or <strong>Edge</strong></li>
+            <li>Click the <strong>install icon</strong> in the address bar (⊕)</li>
+            <li>Click <strong>"Install"</strong> to confirm</li>
+            <li>App opens like a regular desktop program</li>
+          </ol>
+        </div>
+
+        {/* Mac */}
+        <div className="bg-gray-50 rounded-lg p-3 space-y-2 text-gray-800">
+          <p className="font-semibold flex items-center gap-2">
+            <Laptop className="h-4 w-4" /> Mac (Chrome / Safari)
+          </p>
+          <ol className="space-y-1 list-decimal list-inside">
+            <li>Open the app in <strong>Chrome</strong> or <strong>Safari</strong></li>
+            <li>
+              Chrome: click the <strong>install icon ⊕</strong> in the address bar<br />
+              Safari: click <strong>Share → Add to Dock</strong>
+            </li>
+            <li>Click <strong>Install / Add</strong> to confirm</li>
+          </ol>
+        </div>
+
+      </div>
+    )}
+  </CardContent>
+</Card>
 
           {/* iPhone / iPad */}
           <Card className="border-2 border-dashed border-gray-200 opacity-70">
