@@ -59,34 +59,51 @@ export default function DownloadPage() {
 
           {/* Windows Desktop */}
           <Card className="border-2 hover:border-blue-300 transition-colors">
-            <CardHeader className="pb-3">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3">
-                <Monitor className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle className="text-lg">Windows Desktop</CardTitle>
-              <CardDescription>Full offline-capable app for Windows PC</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2 text-sm text-gray-600">
-                <Feature icon={<HardDrive className="h-3.5 w-3.5" />} text="Works offline (no internet needed)" />
-                <Feature icon={<Zap className="h-3.5 w-3.5" />} text="Fast & lightweight" />
-                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Bluetooth printer support" />
-                <Feature icon={<CheckCircle className="h-3.5 w-3.5" />} text="Barcode scanner support" />
-              </ul>
-              <Separator />
-              <a href={EXE_DOWNLOAD_URL} download>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 gap-2">
-                  <Download className="h-4 w-4" />
-                  Download .exe
-                </Button>
-              </a>
-              <p className="text-xs text-gray-400 text-center">Windows 10 / 11 · 64-bit</p>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-xs text-yellow-800">
-                <p className="font-medium mb-1">⚠️ Windows SmartScreen warning?</p>
-                <p>Click <strong>"More info"</strong> → <strong>"Run anyway"</strong> to install. This is safe — the app is not yet signed with a paid certificate.</p>
-              </div>
-            </CardContent>
-          </Card>
+    <CardHeader className="pb-3">
+      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3">
+        <Monitor className="h-6 w-6 text-blue-600" />
+      </div>
+      <CardTitle className="text-lg">Windows Desktop</CardTitle>
+      <CardDescription>Install the desktop app for Windows PCs</CardDescription>
+    </CardHeader>
+
+    <CardContent className="space-y-4">
+      <ul className="space-y-2 text-sm text-gray-600">
+        <Feature icon={<Wifi className="h-3.5 w-3.5" />} text="Internet connection required" />
+        <Feature icon={<Zap className="h-3.5 w-3.5" />} text="Fast & lightweight desktop experience" />
+      </ul>
+
+      <Separator />
+
+      <a href={EXE_DOWNLOAD_URL} download>
+        <Button className="w-full bg-blue-600 hover:bg-blue-700 gap-2">
+          <Download className="h-4 w-4" />
+          Download for Windows (.exe)
+        </Button>
+      </a>
+
+      <p className="text-xs text-gray-400 text-center">
+        Windows 10 / 11 · 64-bit
+      </p>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-800">
+        <p className="font-medium mb-1">Need an offline version?</p>
+        <p>
+          The standard app requires an internet connection for syncing and updates.
+          If your business requires an <strong>offline setup</strong>, please
+          <strong> contact support</strong> for a custom deployment.
+        </p>
+      </div>
+
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-xs text-yellow-800">
+        <p className="font-medium mb-1">⚠️ Windows SmartScreen warning?</p>
+        <p>
+          Click <strong>"More info"</strong> → <strong>"Run anyway"</strong> to install.
+          The app is safe but not yet signed with a paid certificate.
+        </p>
+      </div>
+    </CardContent>
+  </Card>
 
           {/* Android */}
           <Card className="border-2 hover:border-green-300 transition-colors">
