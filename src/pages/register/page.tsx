@@ -218,13 +218,17 @@ export default function RegisterPage() {
 
       if (response.ok && data.success) {
         setSuccess(true)
-        
-        // Auto redirect after 3 seconds
-        setTimeout(() => {
-          navigate("/login")
-        }, 3000)
+        setTimeout(() => navigate("/login"), 3000)
       } else {
-        setError(data.error || "Registration failed. Please try again.")
+        if (data.code === 'USER_EXISTS') {
+          setCurrentStep(2)
+          setError("This email is already registered. Please use a different email or sign in.")
+        } else if (data.code === 'COMPANY_EXISTS') {
+          setCurrentStep(1)
+          setError("A business account with this email already exists. Please use a different email or sign in.")
+        } else {
+          setError(data.error || "Registration failed. Please try again.")
+        }
       }
     } catch (err) {
       setError("Unable to connect to server. Please check your connection and try again.")
@@ -550,7 +554,12 @@ export default function RegisterPage() {
           {error && (
             <Alert className="bg-red-50 border-red-200 mt-6">
               <AlertDescription className="text-red-800">
-                {error}
+                {error}{" "}
+                {(error.includes("already registered") || error.includes("already exists")) && (
+                  <Link to="/login" className="font-semibold underline">
+                    Sign in instead
+                  </Link>
+                )}
               </AlertDescription>
             </Alert>
           )}
