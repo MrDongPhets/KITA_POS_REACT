@@ -222,8 +222,8 @@ export function AppSidebar({ userType = "client", user = null, company = null })
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to={isAdmin ? "/admin/dashboard" : "/client/dashboard"}>
-                <div className={`flex aspect-square size-8 items-center justify-center rounded-lg ${isAdmin ? 'bg-purple-600' : 'bg-blue-600'} text-white`}>
-                  <BrandIcon className="size-4" />
+                <div className={`flex aspect-square size-8 items-center justify-center rounded-lg ${isAdmin ? 'bg-purple-600 text-white' : 'bg-white border border-[#F0F0F5]'}`}>
+                  {isAdmin ? <BrandIcon className="size-4" /> : <img src="/logo.png" alt="TindaPOS" className="size-6 object-contain" />}
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{brandName}</span>

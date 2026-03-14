@@ -352,7 +352,7 @@ export default function ProductsPage() {
           </p>
           <div className="flex gap-3 justify-center">
             <Link to="/client/stores">
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="bg-[#E8302A] hover:bg-[#B91C1C]">
                 <Store className="mr-2 h-4 w-4" />
                 Go to Stores
               </Button>
@@ -373,7 +373,7 @@ export default function ProductsPage() {
           <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-600" />
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Products</h2>
           <p className="text-gray-600 mb-4">{error}</p>
-          <Button onClick={handleRefresh} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={handleRefresh} className="bg-[#E8302A] hover:bg-[#B91C1C]">
             <RefreshCw className="mr-2 h-4 w-4" />
             Try Again
           </Button>

@@ -38,7 +38,7 @@ export function SuccessModal({
         </AlertDialogHeader>
         
         <div className="flex justify-center pt-4">
-          <AlertDialogAction className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-2 rounded-md">
+          <AlertDialogAction className="bg-[#E8302A] hover:bg-[#E8302A] text-white px-8 py-2 rounded-md">
             {buttonText}
           </AlertDialogAction>
         </div>

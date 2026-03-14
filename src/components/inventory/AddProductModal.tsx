@@ -264,7 +264,7 @@ export function AddProductModal({ onProductAdded, trigger = null }) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           {trigger || (
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-[#E8302A] hover:bg-[#B91C1C]">
               <Plus className="mr-2 h-4 w-4" />
               Add Product
             </Button>
@@ -613,7 +613,7 @@ export function AddProductModal({ onProductAdded, trigger = null }) {
               <Button 
                 type="submit" 
                 disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-[#E8302A] hover:bg-[#B91C1C]"
               >
                 {loading ? (
                   <>

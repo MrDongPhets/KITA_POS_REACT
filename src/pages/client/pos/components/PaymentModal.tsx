@@ -156,7 +156,7 @@ export default function PaymentModal({ open, onClose, onSubmit, total, loading }
             <Button
               onClick={handleSubmit}
               disabled={loading || (selectedMethod === 'cash' && change < 0)}
-              className="flex-1 bg-blue-600 hover:bg-blue-700"
+              className="flex-1 bg-[#E8302A] hover:bg-[#B91C1C]"
               size="lg"
             >
               {loading ? (

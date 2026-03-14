@@ -231,8 +231,11 @@ export default function AdminSubscriptions() {
                           <TableCell className="font-medium">{company.name}</TableCell>
                           <TableCell className="text-sm text-gray-600">{company.contact_email}</TableCell>
                           <TableCell>
-                            <Badge className={company.subscription_plan === 'standard' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}>
-                              {company.subscription_plan === 'standard' ? 'Standard' : 'Basic'}
+                            <Badge className={company.subscription_plan === 'laking-negosyo' || company.subscription_plan === 'standard' ? 'bg-orange-100 text-orange-800' : 'bg-red-100 text-red-800'}>
+                              {company.subscription_plan === 'laking-negosyo' ? 'Laking Negosyo'
+                                : company.subscription_plan === 'standard' ? 'Standard (Legacy)'
+                                : company.subscription_plan === 'negosyo' ? 'Negosyo'
+                                : 'Basic (Legacy)'}
                             </Badge>
                           </TableCell>
                           <TableCell>
@@ -315,8 +318,8 @@ export default function AdminSubscriptions() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="basic">Basic — ₱799/mo (1 store)</SelectItem>
-                    <SelectItem value="standard">Standard — ₱1,499/mo (3 stores)</SelectItem>
+                    <SelectItem value="negosyo">Negosyo — ₱299/mo (1 store)</SelectItem>
+                    <SelectItem value="laking-negosyo">Laking Negosyo — ₱599/mo (5 stores)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

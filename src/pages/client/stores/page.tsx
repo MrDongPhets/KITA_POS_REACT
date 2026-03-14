@@ -161,7 +161,7 @@ export default function ClientStores() {
               {stores.length >= storeLimit && (
                 <div className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded px-2 py-1">
                   <AlertCircle className="h-3 w-3" />
-                  {plan === 'basic' ? 'Upgrade to Standard for 3 stores' : 'Store limit reached'}
+                  {plan === 'negosyo' || plan === 'basic' ? 'Upgrade to Laking Negosyo for 5 stores' : 'Store limit reached'}
                 </div>
               )}
             <Dialog open={showDialog} onOpenChange={setShowDialog}>

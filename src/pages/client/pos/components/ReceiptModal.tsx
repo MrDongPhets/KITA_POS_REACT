@@ -225,7 +225,7 @@ export default function ReceiptModal({ open, onClose, sale, store, onNewSale, ca
           </Button>
           <Button
             onClick={onNewSale}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-[#E8302A] hover:bg-[#B91C1C]"
           >
             <ShoppingBag className="h-4 w-4 mr-2" />
             New Sale

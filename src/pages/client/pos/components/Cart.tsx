@@ -106,7 +106,7 @@ export default function Cart({
 
             <Button
               onClick={onCheckout}
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              className="w-full bg-[#E8302A] hover:bg-[#B91C1C]"
               size="lg"
             >
               <CreditCard className="h-4 w-4 mr-2" />

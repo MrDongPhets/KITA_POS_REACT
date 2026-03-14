@@ -16,7 +16,7 @@ const getApiUrl = () => {
 
   // Production fallback
   logger.log('⚠️ No API URL env var found, using production fallback')
-  return 'https://kitapos-backend.onrender.com'
+  return 'https://tindapos-backend.onrender.com'
 }
 
 const API_CONFIG = {

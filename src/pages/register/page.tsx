@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, UserPlus, Building2, ArrowLeft, Check, X, Zap, Star, ChevronRight } from "lucide-react"
+import { Loader2, UserPlus, ArrowLeft, Check, X, Zap, Star, ChevronRight } from "lucide-react"
 import API_CONFIG from "@/config/api" // Import API config
 
 const subscriptionPlans = [
@@ -275,9 +275,7 @@ export default function RegisterPage() {
 
       {/* Header */}
       <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-red-500 rounded-lg flex items-center justify-center mx-auto mb-4">
-          <Building2 className="h-8 w-8 text-white" />
-        </div>
+        <img src="/logo.png" alt="TindaPOS" className="w-16 h-16 mx-auto mb-4 object-contain" />
         <h1 className="text-2xl font-bold text-gray-900">Start Your Business Account</h1>
         <p className="text-gray-600">Get your POS system up and running in minutes</p>
       </div>
@@ -288,14 +286,14 @@ export default function RegisterPage() {
           <div key={step} className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
               currentStep >= step 
-                ? 'bg-red-500 text-white' 
+                ? 'bg-[#E8302A] text-white' 
                 : 'bg-gray-200 text-gray-600'
             }`}>
               {step}
             </div>
             {step < 3 && (
               <div className={`w-12 h-0.5 ml-4 ${
-                currentStep > step ? 'bg-red-500' : 'bg-gray-200'
+                currentStep > step ? 'bg-[#E8302A]' : 'bg-gray-200'
               }`} />
             )}
           </div>
@@ -525,7 +523,7 @@ export default function RegisterPage() {
 
                     {selectedPlan === plan.id && !plan.disabled && (
                       <div className="absolute top-4 right-4">
-                        <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                        <div className="w-6 h-6 bg-[#E8302A] rounded-full flex items-center justify-center">
                           <Check className="h-4 w-4 text-white" />
                         </div>
                       </div>
@@ -558,7 +556,7 @@ export default function RegisterPage() {
             {currentStep < 3 ? (
               <Button
                 onClick={handleNext}
-                className="bg-red-500 hover:bg-red-600"
+                className="bg-[#E8302A] hover:bg-[#B91C1C]"
                 disabled={loading}
               >
                 Next Step
@@ -567,7 +565,7 @@ export default function RegisterPage() {
             ) : (
               <Button
                 onClick={handleSubmit}
-                className="bg-red-500 hover:bg-red-600"
+                className="bg-[#E8302A] hover:bg-[#B91C1C]"
                 disabled={loading}
               >
                 {loading ? (
@@ -593,7 +591,7 @@ export default function RegisterPage() {
           By registering, you agree to our Terms of Service and Privacy Policy
         </p>
         <p className="text-xs text-gray-400 mt-2">
-          POS System v2.0.0 | © 2025 TechCorp | API: {API_CONFIG.BASE_URL}
+          TindaPOS v2.0.0 · © 2026 Mustard Digitals · tindapos.mrdongphets.com
         </p>
       </div>
     </div>

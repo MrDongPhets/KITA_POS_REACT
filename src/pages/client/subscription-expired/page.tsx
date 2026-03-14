@@ -19,7 +19,7 @@ export default function SubscriptionExpiredPage() {
             Hi <strong>{user?.name || 'there'}</strong>, your trial or subscription period has ended.
           </p>
           <p className="text-gray-500 text-sm mb-6">
-            Your data is safe. Contact us to reactivate your account and continue using KITAPOS.
+            Your data is safe. Contact us to reactivate your account and continue using TindaPOS.
           </p>
 
           <div className="bg-blue-50 rounded-lg p-4 mb-6 text-left space-y-1">
@@ -27,17 +27,17 @@ export default function SubscriptionExpiredPage() {
             <p className="text-sm text-blue-700">1. Send payment via GCash / bank transfer</p>
             <p className="text-sm text-blue-700">2. Message us your company name + proof of payment</p>
             <p className="text-sm text-blue-700">3. We'll activate your account within the day</p>
-            <p className="text-sm font-semibold text-blue-900 mt-2">Basic Plan: ₱799 / month (1 store)</p>
-            <p className="text-sm font-semibold text-blue-900">Standard Plan: ₱1,499 / month (3 stores)</p>
+            <p className="text-sm font-semibold text-blue-900 mt-2">Negosyo Plan: ₱299 / month (1 store)</p>
+            <p className="text-sm font-semibold text-blue-900">Laking Negosyo Plan: ₱599 / month (5 stores)</p>
           </div>
 
           <div className="space-y-3">
             <a
-              href="https://m.me/kitapos"
+              href="https://m.me/tindapos"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button className="w-full bg-blue-600 hover:bg-blue-700">
+              <Button className="w-full bg-[#E8302A] hover:bg-[#B91C1C]">
                 <MessageCircle className="mr-2 h-4 w-4" />
                 Message Us to Subscribe
               </Button>

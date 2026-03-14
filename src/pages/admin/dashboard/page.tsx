@@ -318,7 +318,7 @@ export default function SuperAdminDashboard() {
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Dashboard</h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <p className="text-xs text-gray-500 mb-4">API: {API_CONFIG.BASE_URL}</p>
-          <Button onClick={fetchDashboardData} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={fetchDashboardData} className="bg-[#E8302A] hover:bg-[#B91C1C]">
             <RefreshCw className="mr-2 h-4 w-4" />
             Try Again
           </Button>

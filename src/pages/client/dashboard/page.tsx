@@ -244,7 +244,7 @@ export default function ClientDashboard() {
           <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-600" />
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Dashboard</h2>
           <p className="text-gray-600 mb-4">{error}</p>
-          <Button onClick={handleRefresh} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={handleRefresh} className="bg-[#E8302A] hover:bg-[#B91C1C]">
             <RefreshCw className="mr-2 h-4 w-4" />
             Try Again
           </Button>
@@ -330,7 +330,7 @@ export default function ClientDashboard() {
                 <p className="text-xs text-blue-500">Share this code with your staff to let them log in</p>
                 <button
                   onClick={copyCompanyCode}
-                  className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700"
+                  className="flex items-center gap-1 px-3 py-1.5 bg-[#E8302A] text-white text-xs rounded-md hover:bg-[#B91C1C]"
                 >
                   {codeCopied ? <><Check className="h-3 w-3" /> Copied!</> : <><Copy className="h-3 w-3" /> Copy</>}
                 </button>

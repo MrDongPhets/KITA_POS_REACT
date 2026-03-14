@@ -275,7 +275,7 @@ export default function IngredientsPage() {
           </p>
           <div className="flex gap-3 justify-center">
             <Link to="/client/stores">
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="bg-[#E8302A] hover:bg-[#B91C1C]">
                 Go to Stores
               </Button>
             </Link>

@@ -93,7 +93,7 @@ function LoginForm() {
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-[#E8302A]" />
             <h2 className="text-lg font-semibold text-gray-900 mb-2">Loading...</h2>
             <p className="text-gray-600">Initializing application</p>
             <p className="text-xs text-gray-500 mt-2">API: {API_CONFIG.BASE_URL}</p>
@@ -130,11 +130,9 @@ function LoginForm() {
 
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-red-500 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <Building2 className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">POS System</h1>
-          <p className="text-gray-600">Welcome back to your business management platform</p>
+          <img src="/logo.png" alt="TindaPOS" className="w-16 h-16 mx-auto mb-4 object-contain" />
+          <h1 className="text-2xl font-bold text-gray-900">TindaPOS</h1>
+          <p className="text-gray-600">Ang POS para sa bawat tindahan.</p>
         </div>
 
         {/* Session Warning Card */}
@@ -168,7 +166,7 @@ function LoginForm() {
                     navigate('/client/dashboard')
                   }
                 }}
-                className="w-full bg-blue-600 hover:bg-blue-700"
+                className="w-full bg-[#E8302A] hover:bg-[#B91C1C]"
               >
                 <User className="mr-2 h-4 w-4" />
                 Go to My Dashboard
@@ -194,7 +192,7 @@ function LoginForm() {
         {/* Footer */}
         <div className="mt-8 text-center">
           <p className="text-xs text-gray-500">
-            POS System v2.0.0 | © 2025 Mustard Digitals
+            TindaPOS v2.0.0 · © 2026 Mustard Digitals
           </p>
           {/* <p className="text-xs text-gray-400 mt-1">
             Secure session active • API: {API_CONFIG.BASE_URL}
@@ -229,11 +227,9 @@ function LoginForm() {
 
       {/* Header */}
       <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-red-500 rounded-lg flex items-center justify-center mx-auto mb-4">
-          <Building2 className="h-8 w-8 text-white" />
-        </div>
-        <h1 className="text-2xl font-bold text-gray-900">POS System</h1>
-        <p className="text-gray-600">Welcome back to your business management platform</p>
+        <img src="/logo.png" alt="TindaPOS" className="w-16 h-16 mx-auto mb-4 object-contain" />
+        <h1 className="text-2xl font-bold text-gray-900">TindaPOS</h1>
+        <p className="text-gray-600">Ang POS para sa bawat tindahan.</p>
       </div>
 
       {/* Login Card */}
@@ -246,12 +242,12 @@ function LoginForm() {
         </CardHeader>
         
         <CardContent>
-          <div className="text-center p-3 bg-blue-50 rounded-lg mb-6">
+          <div className="text-center p-3 bg-[#FFF1F0] rounded-lg mb-6">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Building2 className="h-5 w-5 text-blue-600" />
-              <span className="font-medium text-blue-900">Business Account</span>
+              <Building2 className="h-5 w-5 text-[#E8302A]" />
+              <span className="font-medium text-[#1A1A2E]">Business Account</span>
             </div>
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-[#B91C1C]">
               For company owners, managers, and staff members
             </p>
           </div>
@@ -294,7 +290,7 @@ function LoginForm() {
 
             <Button 
               onClick={handleLogin}
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              className="w-full bg-[#E8302A] hover:bg-[#B91C1C]"
               disabled={loading}
             >
               {loading ? (
@@ -335,7 +331,7 @@ function LoginForm() {
           {!isNativeApp && (
             <div className="text-center text-sm mt-6 pt-4 border-t">
               <span className="text-gray-600">Don't have a business account? </span>
-              <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link to="/register" className="text-[#E8302A] hover:text-[#B91C1C] font-medium">
                 Start Free Trial
               </Link>
             </div>
@@ -360,7 +356,7 @@ function LoginForm() {
       {/* Get the App link — browser only */}
       {!isNativeApp && (
         <div className="mt-4 w-full max-w-md text-center">
-          <Link to="/download" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+          <Link to="/download" className="text-sm text-[#E8302A] hover:text-[#B91C1C] font-medium">
             📱 Get the App
           </Link>
         </div>
@@ -369,7 +365,7 @@ function LoginForm() {
       {/* Footer */}
       <div className="mt-6 text-center">
         <p className="text-xs text-gray-500">
-          POS System v2.0.0 | © 2025 Mustard Digitals
+          TindaPOS v2.0.0 · © 2026 Mustard Digitals
         </p>
         {/* <p className="text-xs text-gray-400 mt-1">
           API: {API_CONFIG.BASE_URL}

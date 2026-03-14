@@ -87,10 +87,10 @@ function SetupWizard() {
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
       {/* Header */}
       <div className="text-center mb-8">
-        <div className="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-[#E8302A] rounded-xl flex items-center justify-center mx-auto mb-4">
           <Building2 className="h-8 w-8 text-white" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">KitaPOS Setup</h1>
+        <h1 className="text-2xl font-bold text-gray-900">TindaPOS Setup</h1>
         <p className="text-gray-500 mt-1">Offline mode — first-time configuration</p>
       </div>
 
@@ -99,13 +99,13 @@ function SetupWizard() {
         {STEPS.map((label, i) => (
           <div key={label} className="flex items-center gap-2">
             <div className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-semibold ${
-              i < step ? 'bg-blue-600 text-white' :
-              i === step ? 'bg-blue-100 text-blue-700 border-2 border-blue-600' :
+              i < step ? 'bg-[#E8302A] text-white' :
+              i === step ? 'bg-[#FFF1F0] text-[#E8302A] border-2 border-[#E8302A]' :
               'bg-gray-100 text-gray-400'
             }`}>
               {i < step ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
             </div>
-            <span className={`text-sm ${i === step ? 'text-blue-700 font-medium' : 'text-gray-400'}`}>
+            <span className={`text-sm ${i === step ? 'text-[#E8302A] font-medium' : 'text-gray-400'}`}>
               {label}
             </span>
             {i < STEPS.length - 1 && <ChevronRight className="h-4 w-4 text-gray-300" />}
@@ -242,7 +242,7 @@ function SetupWizard() {
                 <Button variant="outline" className="flex-1" onClick={() => { setError(''); setStep(1) }} disabled={loading}>
                   Back
                 </Button>
-                <Button className="flex-1 bg-blue-600 hover:bg-blue-700" onClick={handleSubmit} disabled={loading}>
+                <Button className="flex-1 bg-[#E8302A] hover:bg-[#B91C1C]" onClick={handleSubmit} disabled={loading}>
                   {loading ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Setting up...</>
                   ) : (
@@ -255,7 +255,7 @@ function SetupWizard() {
         )}
       </Card>
 
-      <p className="text-xs text-gray-400 mt-6">KitaPOS Offline Mode</p>
+      <p className="text-xs text-gray-400 mt-6">TindaPOS Offline Mode</p>
     </div>
   )
 }

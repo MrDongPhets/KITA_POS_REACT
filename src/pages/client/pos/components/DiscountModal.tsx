@@ -166,7 +166,7 @@ export default function DiscountModal({ open, onClose, onApply, currentDiscount,
             </Button>
             <Button
               onClick={handleApply}
-              className="flex-1 bg-blue-600 hover:bg-blue-700"
+              className="flex-1 bg-[#E8302A] hover:bg-[#B91C1C]"
               disabled={!discountValue || parseFloat(discountValue) <= 0}
             >
               Apply Discount

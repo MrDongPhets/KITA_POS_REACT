@@ -12,16 +12,12 @@ import {
   Globe,
   CheckCircle,
   ArrowLeft,
-  Chrome,
-  PlusSquare,
-  Building2,
   Wifi,
-  HardDrive,
   Laptop,
   Zap
 } from "lucide-react"
 
-const EXE_DOWNLOAD_URL = "/KitaPOS-1.0.0.exe"
+const EXE_DOWNLOAD_URL = "/TindaPOS-1.0.0.exe"
 
 export default function DownloadPage() {
   const [androidStepsOpen, setAndroidStepsOpen] = useState(false)
@@ -32,10 +28,8 @@ export default function DownloadPage() {
       <div className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-red-500 rounded-lg flex items-center justify-center">
-              <Building2 className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-bold text-gray-900 text-lg">KitaPOS</span>
+            <img src="/logo.png" alt="TindaPOS" className="w-9 h-9 object-contain" />
+            <span className="font-bold text-gray-900 text-lg">TindaPOS</span>
           </div>
           <Link to="/login">
             <Button variant="outline" size="sm" className="gap-2">
@@ -49,9 +43,9 @@ export default function DownloadPage() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Hero */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">Get KitaPOS</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">Get TindaPOS</h1>
           <p className="text-gray-500 text-lg max-w-xl mx-auto">
-            Install KitaPOS on your device for the best experience. Available on Windows, Android, and iOS.
+            Install TindaPOS on your device for the best experience. Available on Windows, Android, and iOS.
           </p>
         </div>
 
@@ -77,7 +71,7 @@ export default function DownloadPage() {
       <Separator />
 
       <a href={EXE_DOWNLOAD_URL} download>
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 gap-2">
+        <Button className="w-full bg-[#E8302A] hover:bg-[#B91C1C] gap-2">
           <Download className="h-4 w-4" />
           Download for Windows (.exe)
         </Button>
@@ -221,7 +215,7 @@ export default function DownloadPage() {
           <CardContent className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
-                <Chrome className="h-5 w-5 text-blue-600" />
+                <Globe className="h-5 w-5 text-blue-600" />
               </div>
               <div>
                 <p className="font-medium text-blue-900">Just want to use the browser?</p>
@@ -229,7 +223,7 @@ export default function DownloadPage() {
               </div>
             </div>
             <Link to="/login">
-              <Button className="bg-blue-600 hover:bg-blue-700 shrink-0 gap-2">
+              <Button className="bg-[#E8302A] hover:bg-[#B91C1C] shrink-0 gap-2">
                 <Globe className="h-4 w-4" />
                 Open Web App
               </Button>
@@ -239,7 +233,7 @@ export default function DownloadPage() {
 
         {/* Footer */}
         <div className="text-center text-xs text-gray-400">
-          <p>KitaPOS v2.0.0 · © 2025 Mustard Digitals</p>
+          <p>TindaPOS v2.0.0 · © 2025 Mustard Digitals</p>
         </div>
       </div>
     </div>
