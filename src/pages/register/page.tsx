@@ -99,11 +99,23 @@ export default function RegisterPage() {
   useEffect(() => {
     const token = localStorage.getItem('authToken')
     const userType = localStorage.getItem('userType')
-    
+
     if (token && userType === 'client') {
       navigate('/client/dashboard')
     }
   }, [navigate])
+
+  // Pre-fill from Google OAuth redirect (?google=true&email=...&name=...)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('google') === 'true') {
+      const email = params.get('email') || ''
+      const name = params.get('name') || ''
+      setUserData(prev => ({ ...prev, email, name }))
+      setCompanyData(prev => ({ ...prev, email }))
+      window.history.replaceState({}, '', '/register')
+    }
+  }, [])
 
   // Check password strength
   useEffect(() => {

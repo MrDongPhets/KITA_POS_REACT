@@ -11,6 +11,8 @@ import RegisterPage from '@/pages/register/page'
 import SystemAdminPage from '@/pages/system-admin/page'
 import StaffLoginPage from '@/pages/staff/login/page'
 import DownloadPage from '@/pages/download/page'
+import ForgotPasswordPage from '@/pages/forgot-password/page'
+import ResetPasswordPage from '@/pages/reset-password/page'
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/dashboard/page'
@@ -55,6 +57,8 @@ function App() {
         <Route path="/system-admin" element={<SystemAdminPage />} />
         <Route path="/staff/login" element={<StaffLoginPage />} />
         <Route path="/download" element={<DownloadPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* Admin routes */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />

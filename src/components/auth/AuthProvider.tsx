@@ -382,6 +382,41 @@ export function AuthProvider({ children }) {
     }
   }, [isAuthenticated])
 
+  const loginWithToken = useCallback(async (token: string) => {
+    if (isAuthenticated) return { success: false, error: 'Already logged in' }
+    setLoading(true)
+    try {
+      // Fetch full user + company data using the token
+      const res = await fetch(`${API_CONFIG.BASE_URL}/auth/me`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (!res.ok) return { success: false, error: 'Invalid or expired token' }
+
+      const data = await res.json()
+
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('userData')
+      localStorage.removeItem('userType')
+      localStorage.removeItem('companyData')
+      localStorage.removeItem('subscriptionData')
+      localStorage.removeItem('staffData')
+
+      localStorage.setItem('authToken', token)
+      localStorage.setItem('userData', JSON.stringify(data.user))
+      localStorage.setItem('userType', 'client')
+      if (data.company) localStorage.setItem('companyData', JSON.stringify(data.company))
+
+      setUser(data.user)
+      setUserType('client')
+      setIsAuthenticated(true)
+      return { success: true }
+    } catch {
+      return { success: false, error: 'Connection failed' }
+    } finally {
+      setLoading(false)
+    }
+  }, [isAuthenticated])
+
   const logout = useCallback(async () => {
     logger.log('🚪 Logging out...')
     
@@ -513,6 +548,7 @@ export function AuthProvider({ children }) {
     initialized,
     needsSetup,
     login,
+    loginWithToken,
     logout,
     forceLogout,
     completeSetup,
@@ -527,7 +563,7 @@ export function AuthProvider({ children }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#E8302A] mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
           <p className="text-xs text-gray-500 mt-2">API: {API_CONFIG.BASE_URL}</p>
         </div>
