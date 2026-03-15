@@ -1,7 +1,9 @@
 
 import { useState, useEffect } from "react"
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/ui/app-sidebar"
+import { Separator } from "@/components/ui/separator"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -272,25 +274,39 @@ export default function InventoryTransferPage() {
     <SidebarProvider>
       <AppSidebar userType="client" user={user} />
       <SidebarInset>
-        <div className="p-6">
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b overflow-hidden">
+          <div className="flex items-center gap-2 px-4 shrink-0">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Inventory Transfer</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </header>
+
+        <div className="flex flex-1 flex-col gap-4 p-4">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <ArrowRightLeft className="h-8 w-8 text-blue-600" />
+              <h1 className="text-2xl font-semibold flex items-center gap-2">
+                <ArrowRightLeft className="h-6 w-6 text-blue-600 shrink-0" />
                 Inventory Transfer
               </h1>
-              <p className="text-gray-600 mt-1">Transfer products between stores</p>
+              <p className="text-gray-500 text-sm mt-1">Transfer products between stores</p>
             </div>
-            
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={fetchTransfers} disabled={loading}>
+
+            <div className="flex gap-2 items-start sm:items-end shrink-0">
+              <Button variant="outline" size="sm" onClick={fetchTransfers} disabled={loading}>
                 <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
               </Button>
-              
+
               <Dialog open={showDialog} onOpenChange={setShowDialog}>
                 <DialogTrigger asChild>
-                  <Button>
+                  <Button className="bg-[#E8302A] hover:bg-[#B91C1C]">
                     <Plus className="h-4 w-4 mr-2" />
                     New Transfer
                   </Button>
@@ -558,6 +574,7 @@ export default function InventoryTransferPage() {
         </div>
 
         {/* Rejection Dialog */}
+
         <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
           <DialogContent>
             <DialogHeader>

@@ -121,6 +121,62 @@ export default function SalesReportsPage() {
     };
   };
 
+  const exportCSV = () => {
+    const today = new Date().toISOString().split('T')[0]
+    const rows: string[] = []
+
+    const addSection = (title: string, headers: string[], data: string[][]) => {
+      rows.push(title)
+      rows.push(headers.map(h => `"${h}"`).join(','))
+      data.forEach(row => rows.push(row.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')))
+      rows.push('')
+    }
+
+    if (salesSummary) {
+      rows.push('SALES SUMMARY')
+      rows.push('"Metric","Value"')
+      rows.push(`"Total Sales","₱${salesSummary.total_sales?.toLocaleString() || 0}"`)
+      rows.push(`"Total Transactions","${salesSummary.total_transactions}"`)
+      rows.push(`"Avg Transaction","₱${salesSummary.average_transaction?.toFixed(2) || 0}"`)
+      rows.push(`"Total Items Sold","${salesSummary.total_items}"`)
+      rows.push(`"Total Discount","₱${salesSummary.total_discount?.toLocaleString() || 0}"`)
+      rows.push(`"Total Tax","₱${salesSummary.total_tax?.toLocaleString() || 0}"`)
+      rows.push('')
+    }
+
+    if (topProducts.length > 0) {
+      addSection(
+        'TOP PRODUCTS',
+        ['Rank', 'Product', 'SKU', 'Total Sales (₱)', 'Qty Sold'],
+        topProducts.map((p, i) => [i + 1, p.product_name, p.product_sku, p.total_sales, p.total_quantity])
+      )
+    }
+
+    if (staffPerformance.length > 0) {
+      addSection(
+        'STAFF PERFORMANCE',
+        ['Staff', 'Total Sales (₱)', 'Transactions', 'Avg Sale (₱)'],
+        staffPerformance.map(s => [s.staff_name, s.total_sales, s.total_transactions, s.average_transaction?.toFixed(2)])
+      )
+    }
+
+    if (periodData.length > 0) {
+      addSection(
+        `SALES TREND (${period})`,
+        ['Period', 'Total Sales (₱)', 'Transactions'],
+        periodData.map(d => [d.period, d.total_sales, d.total_transactions])
+      )
+    }
+
+    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `sales-report-${today}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   const fetchAllReports = async () => {
     try {
       setLoading(true);
@@ -248,8 +304,9 @@ export default function SalesReportsPage() {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" size="icon">
-                <Download className="h-4 w-4" />
+              <Button variant="outline" onClick={exportCSV}>
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
               </Button>
             </div>
           </div>

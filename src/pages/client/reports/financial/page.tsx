@@ -122,6 +122,50 @@ export default function FinancialReportsPage() {
     };
   };
 
+  const exportCSV = () => {
+    const today = new Date().toISOString().split('T')[0]
+    const rows: string[] = []
+
+    const addSection = (title: string, headers: string[], data: string[][]) => {
+      rows.push(title)
+      rows.push(headers.map(h => `"${h}"`).join(','))
+      data.forEach(row => rows.push(row.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')))
+      rows.push('')
+    }
+
+    if (profitMargins.length > 0) {
+      addSection(
+        `PROFIT MARGINS (${dateRange})`,
+        ['Name', 'Revenue (₱)', 'COGS (₱)', 'Gross Profit (₱)', 'Net Profit (₱)', 'Gross Margin %'],
+        profitMargins.map(i => [i.name, i.total_revenue, i.total_cogs, i.gross_profit, i.net_profit, i.gross_margin?.toFixed(2)])
+      )
+    }
+
+    if (revenueByStore?.stores?.length > 0) {
+      addSection(
+        'REVENUE BY STORE',
+        ['Store', 'Address', 'Revenue (₱)', 'Transactions', 'Avg Sale (₱)'],
+        revenueByStore.stores.map(s => [s.store_name, s.store_address, s.total_revenue, s.transaction_count, s.average_transaction?.toFixed(2)])
+      )
+    }
+
+    if (taxReports?.data?.length > 0) {
+      addSection(
+        'TAX SUMMARY',
+        ['Period', 'Total Sales (₱)', 'Tax Collected (₱)'],
+        taxReports.data.map(t => [t.period, t.total_sales, t.total_tax])
+      )
+    }
+
+    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `financial-report-${today}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   const fetchAllReports = async () => {
     try {
       setLoading(true);
@@ -237,9 +281,9 @@ export default function FinancialReportsPage() {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline">
+              <Button variant="outline" onClick={exportCSV}>
                 <Download className="h-4 w-4 mr-2" />
-                Export
+                Export CSV
               </Button>
             </div>
           </div>
@@ -454,27 +498,27 @@ export default function FinancialReportsPage() {
                 <CardContent>
                   <div className="space-y-4">
                     {revenueByStore?.stores?.map((store) => (
-                      <div key={store.store_id} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center gap-4">
-                          <div className="p-3 rounded-lg bg-blue-100">
-                            <Store className="h-6 w-6 text-blue-600" />
+                      <div key={store.store_id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-blue-100 shrink-0">
+                            <Store className="h-5 w-5 text-blue-600" />
                           </div>
-                          <div>
-                            <p className="font-semibold">{store.store_name}</p>
-                            <p className="text-sm text-muted-foreground">{store.store_address}</p>
+                          <div className="min-w-0">
+                            <p className="font-semibold truncate">{store.store_name}</p>
+                            <p className="text-sm text-muted-foreground truncate">{store.store_address}</p>
                           </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-8 text-center">
+                        <div className="grid grid-cols-3 gap-4 text-center">
                           <div>
-                            <p className="text-2xl font-bold">₱{store.total_revenue.toLocaleString()}</p>
+                            <p className="text-lg font-bold">₱{store.total_revenue.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground">Revenue</p>
                           </div>
                           <div>
-                            <p className="text-2xl font-bold">{store.transaction_count}</p>
+                            <p className="text-lg font-bold">{store.transaction_count}</p>
                             <p className="text-xs text-muted-foreground">Transactions</p>
                           </div>
                           <div>
-                            <p className="text-2xl font-bold">₱{store.average_transaction.toLocaleString()}</p>
+                            <p className="text-lg font-bold">₱{store.average_transaction.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground">Avg Sale</p>
                           </div>
                         </div>
@@ -486,7 +530,7 @@ export default function FinancialReportsPage() {
                   {revenueByStore?.company_totals && (
                     <div className="mt-6 p-4 bg-gray-50 rounded-lg">
                       <h4 className="font-semibold mb-3">Company Totals</h4>
-                      <div className="grid grid-cols-4 gap-4 text-center">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                         <div>
                           <p className="text-2xl font-bold text-blue-600">
                             ₱{revenueByStore.company_totals.total_revenue.toLocaleString()}

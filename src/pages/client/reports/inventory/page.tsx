@@ -80,6 +80,62 @@ export default function InventoryReportsPage() {
     }
   };
 
+  const exportCSV = () => {
+    const today = new Date().toISOString().split('T')[0]
+    const rows: string[] = []
+
+    const addSection = (title: string, headers: string[], data: string[][]) => {
+      rows.push(title)
+      rows.push(headers.map(h => `"${h}"`).join(','))
+      data.forEach(row => rows.push(row.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')))
+      rows.push('')
+    }
+
+    if (inventorySummary) {
+      rows.push('INVENTORY SUMMARY')
+      rows.push('"Metric","Value"')
+      rows.push(`"Total Products","${inventorySummary.total_products}"`)
+      rows.push(`"Total Units In Stock","${inventorySummary.total_stock_quantity}"`)
+      rows.push(`"Stock Cost Value","₱${inventorySummary.total_stock_value?.toLocaleString() || 0}"`)
+      rows.push(`"Stock Retail Value","₱${inventorySummary.total_retail_value?.toLocaleString() || 0}"`)
+      rows.push(`"Low Stock Count","${inventorySummary.low_stock_count}"`)
+      rows.push(`"Out of Stock Count","${inventorySummary.out_of_stock_count}"`)
+      rows.push('')
+    }
+
+    if (stockValue?.categories?.length > 0) {
+      addSection(
+        'STOCK VALUE BY CATEGORY',
+        ['Category', 'Products', 'Units', 'Cost Value (₱)', 'Retail Value (₱)', 'Margin %'],
+        stockValue.categories.map(c => [c.category_name, c.total_products, c.total_quantity, c.cost_value, c.retail_value, c.profit_margin?.toFixed(2)])
+      )
+    }
+
+    if (turnoverRates.length > 0) {
+      addSection(
+        'TOP TURNOVER RATES (Last 30 Days)',
+        ['Product', 'Turnover Rate', 'Units Sold'],
+        turnoverRates.map(t => [t.product_name, t.turnover_rate, t.quantity_sold])
+      )
+    }
+
+    if (lowStockProducts.length > 0) {
+      addSection(
+        'LOW STOCK ALERTS',
+        ['Product', 'SKU', 'Status', 'Stock Qty', 'Min Level', 'Reorder Qty', 'Stock Value (₱)'],
+        lowStockProducts.map(p => [p.name, p.sku, p.stock_status, p.stock_quantity, p.min_stock_level, p.reorder_quantity, p.stock_value])
+      )
+    }
+
+    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `inventory-report-${today}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   const fetchAllReports = async () => {
     try {
       setLoading(true);
@@ -181,9 +237,9 @@ export default function InventoryReportsPage() {
               <h1 className="text-3xl font-bold tracking-tight">Inventory Reports</h1>
               <p className="text-muted-foreground mt-1">Stock levels, valuations, and movement analysis</p>
             </div>
-            <Button variant="outline">
+            <Button variant="outline" onClick={exportCSV}>
               <Download className="h-4 w-4 mr-2" />
-              Export Report
+              Export CSV
             </Button>
           </div>
 
