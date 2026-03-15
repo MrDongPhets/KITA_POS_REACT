@@ -84,9 +84,8 @@ export default function RoleChangeDialog({ staff, onSuccess }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Shield className="h-4 w-4 mr-2" />
-          Change Role
+        <Button variant="outline" size="sm" title="Change Role">
+          <Shield className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>

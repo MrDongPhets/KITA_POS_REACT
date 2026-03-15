@@ -258,8 +258,8 @@ export default function ClientDashboard() {
       <AppSidebar userType="client" user={user} company={company} />
       <SidebarInset>
         {/* Header with Store Selector */}
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 overflow-hidden">
+          <div className="flex items-center gap-2 px-4 shrink-0">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
@@ -270,10 +270,10 @@ export default function ClientDashboard() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          
+
           {/* Store Selector in Header */}
-          <div className="ml-auto px-4 flex items-center gap-4">
-            <SimpleStoreSelector 
+          <div className="ml-auto px-4 flex items-center gap-2 min-w-0 overflow-hidden">
+            <SimpleStoreSelector
               stores={stores}
               selectedStore={selectedStore}
               onStoreSelect={selectStore}
@@ -281,11 +281,12 @@ export default function ClientDashboard() {
               onToggleViewMode={toggleViewMode}
               loading={false}
             />
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               onClick={handleRefresh}
               disabled={refreshing}
+              className="shrink-0"
             >
               <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </Button>

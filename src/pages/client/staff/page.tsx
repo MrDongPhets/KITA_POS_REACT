@@ -48,7 +48,6 @@ import {
 } from 'lucide-react';
 import API_CONFIG from '@/config/api';
 import PermissionMatrix from '@/components/staff/PermissionMatrix';
-import RoleChangeDialog from '@/components/staff/RoleChangeDialog';
 
 export default function StaffPage() {
   const navigate = useNavigate();
@@ -305,16 +304,16 @@ export default function StaffPage() {
         <main className="flex-1 overflow-auto p-6">
           <div className="space-y-6">
             {/* Page Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Staff Management</h1>
                 <p className="text-gray-600 mt-1">Manage your team members and their access</p>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-start sm:items-end">
                 {permissions && <PermissionMatrix permissions={permissions} />}
-                
-                <Button 
+
+                <Button
                   variant="outline"
                   onClick={() => navigate('/client/staff/activity-logs')}
                 >
@@ -418,17 +417,6 @@ export default function StaffPage() {
                             onChange={(e) => setFormData({ ...formData, passcode: e.target.value.replace(/\D/g, '') })} required />
                           <p className="text-xs text-gray-500">Staff will use this PIN to login to POS</p>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="role">Role</Label>
-                          <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })}>
-                            <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="staff">Staff</SelectItem>
-                              <SelectItem value="supervisor">Supervisor</SelectItem>
-                              <SelectItem value="manager">Manager</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
                         {error && (
                           <Alert variant="destructive">
                             <AlertCircle className="h-4 w-4" />
@@ -469,7 +457,7 @@ export default function StaffPage() {
                     {filteredStaff.map((member) => (
                       <div
                         key={member.id}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border rounded-lg hover:bg-gray-50 transition-colors"
                       >
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -484,37 +472,28 @@ export default function StaffPage() {
                                 {member.role}
                               </span>
                             </div>
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-600">
                               <span>ID: {member.staff_id}</span>
-                              <span>•</span>
+                              <span className="hidden sm:inline">•</span>
                               <div className="flex items-center gap-1">
                                 <Store className="h-3 w-3" />
                                 {getStoreName(member.store_id)}
                               </div>
-                              <span>•</span>
-                              <span className="text-xs text-gray-500">Store ID: {member.store_id}</span>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          <RoleChangeDialog staff={member} onSuccess={fetchStaff} />
-                          
+                        <div className="flex items-center gap-2 sm:shrink-0">
                           <Button
                             variant="outline"
                             size="sm"
+                            title={member.is_active ? 'Deactivate' : 'Activate'}
                             onClick={() => toggleActive(member.id, member.is_active, member.name)}
                           >
                             {member.is_active ? (
-                              <>
-                                <XCircle className="h-4 w-4 mr-2" />
-                                Deactivate
-                              </>
+                              <XCircle className="h-4 w-4" />
                             ) : (
-                              <>
-                                <CheckCircle className="h-4 w-4 mr-2" />
-                                Activate
-                              </>
+                              <CheckCircle className="h-4 w-4" />
                             )}
                           </Button>
 

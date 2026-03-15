@@ -40,6 +40,7 @@ import ActivityLogsPage from '@/pages/client/staff/activity-logs/page'
 import StoresPage from '@/pages/client/stores/page'
 import StoreRequestPage from '@/pages/client/stores/request/page'
 import SubscriptionExpiredPage from '@/pages/client/subscription-expired/page'
+import SettingsPage from '@/pages/client/settings/page'
 
 // Staff POS
 import PosPage from '@/pages/pos/page'
@@ -86,6 +87,7 @@ function App() {
         <Route path="/client/stores" element={<StoresPage />} />
         <Route path="/client/stores/request" element={<StoreRequestPage />} />
         <Route path="/client/subscription-expired" element={<SubscriptionExpiredPage />} />
+        <Route path="/client/settings" element={<SettingsPage />} />
 
         {/* Staff POS */}
         <Route path="/pos" element={<PosPage />} />

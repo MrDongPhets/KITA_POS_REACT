@@ -290,7 +290,7 @@ export default function InventoryTrackingPage() {
       <AppSidebar userType="client" user={user} />
       <SidebarInset>
         {/* Header */}
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 overflow-hidden">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
@@ -314,7 +314,7 @@ export default function InventoryTrackingPage() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div className="ml-auto px-4 flex items-center gap-2">
+          <div className="ml-auto px-4 flex items-center gap-2 min-w-0 overflow-hidden">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
@@ -339,7 +339,7 @@ export default function InventoryTrackingPage() {
         {/* Main Content */}
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {/* Page Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h1 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
                 <BarChart3 className="h-6 w-6 text-blue-600" />

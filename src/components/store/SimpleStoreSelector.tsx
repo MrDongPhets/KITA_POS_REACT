@@ -33,14 +33,13 @@ export function SimpleStoreSelector({
   }
 
   if (stores.length <= 1) {
-    // Single store - just show store name
     return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        <Building2 className="h-4 w-4 text-blue-600" />
-        <span className="font-medium text-gray-900">
+      <div className={`flex items-center gap-2 min-w-0 ${className}`}>
+        <Building2 className="h-4 w-4 text-blue-600 shrink-0" />
+        <span className="font-medium text-gray-900 truncate max-w-[120px] sm:max-w-none">
           {stores[0]?.name || 'Main Store'}
         </span>
-        <Badge variant="secondary" className="text-xs">
+        <Badge variant="secondary" className="text-xs hidden sm:inline-flex shrink-0">
           Single Store
         </Badge>
       </div>
@@ -49,91 +48,81 @@ export function SimpleStoreSelector({
 
   // Multiple stores - show selector
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      <Building2 className="h-4 w-4 text-blue-600 flex-shrink-0" />
-      
+    <div className={`flex items-center gap-2 min-w-0 ${className}`}>
+      <Building2 className="h-4 w-4 text-blue-600 shrink-0" />
+
       {/* View Mode Toggle */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 min-w-0">
         <Button
           variant={viewMode === 'all' ? 'default' : 'outline'}
           size="sm"
           onClick={onToggleViewMode}
-          className="h-8 text-xs"
+          className="h-8 text-xs shrink-0"
         >
           {viewMode === 'all' ? (
             <>
-              <CheckCircle className="h-3 w-3 mr-1" />
-              All Stores
+              <CheckCircle className="h-3 w-3 sm:mr-1" />
+              <span className="hidden sm:inline">All Stores</span>
             </>
           ) : (
-            'View All Stores'
+            <>
+              <span className="hidden sm:inline">View All Stores</span>
+              <span className="sm:hidden">All</span>
+            </>
           )}
         </Button>
-        
+
         {viewMode === 'single' && (
-          <>
-            <span className="text-gray-400">|</span>
-            <Select
-              value={selectedStore?.id || ''}
-              onValueChange={(storeId) => {
-                const store = stores.find(s => s.id === storeId)
-                onStoreSelect(store)
-              }}
-            >
-              <SelectTrigger className="w-48 h-8">
-                <SelectValue placeholder="Select store...">
-                  {selectedStore ? (
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{selectedStore.name}</span>
-                      <Badge 
-                        variant="secondary" 
-                        className={`text-xs ${
-                          selectedStore.status === 'active' 
-                            ? 'bg-green-100 text-green-700' 
-                            : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        {selectedStore.status}
-                      </Badge>
-                    </div>
-                  ) : (
-                    'Select store...'
-                  )}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {stores.map((store) => (
-                  <SelectItem key={store.id} value={store.id}>
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-medium">{store.name}</span>
-                      <div className="flex items-center gap-2 ml-2">
-                        <Badge 
-                          variant="secondary" 
-                          className={`text-xs ${
-                            store.status === 'active' 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-gray-100 text-gray-600'
-                          }`}
-                        >
-                          {store.status}
-                        </Badge>
-                        <span className="text-xs text-gray-500">
-                          ${store.sales?.toFixed(0) || '0'}
-                        </span>
-                      </div>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </>
+          <Select
+            value={selectedStore?.id || ''}
+            onValueChange={(storeId) => {
+              const store = stores.find(s => s.id === storeId)
+              onStoreSelect(store)
+            }}
+          >
+            <SelectTrigger className="w-32 sm:w-44 h-8 min-w-0">
+              <SelectValue placeholder="Select store...">
+                {selectedStore ? (
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="font-medium truncate">{selectedStore.name}</span>
+                    <Badge
+                      variant="secondary"
+                      className={`text-xs shrink-0 hidden sm:inline-flex ${
+                        selectedStore.status === 'active'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {selectedStore.status}
+                    </Badge>
+                  </div>
+                ) : (
+                  'Select store...'
+                )}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {stores.map((store) => (
+                <SelectItem key={store.id} value={store.id}>
+                  <div className="flex items-center justify-between w-full">
+                    <span className="font-medium">{store.name}</span>
+                    <Badge
+                      variant="secondary"
+                      className={`text-xs ml-2 ${
+                        store.status === 'active'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {store.status}
+                    </Badge>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         )}
       </div>
-
-      {/* Store Count Badge */}
-      <Badge variant="outline" className="text-xs">
-        {stores.length} store{stores.length !== 1 ? 's' : ''}
-      </Badge>
     </div>
   )
 }

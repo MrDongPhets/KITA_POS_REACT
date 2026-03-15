@@ -160,7 +160,7 @@ export default function CategoriesPage() {
       <AppSidebar userType="client" user={user} />
       <SidebarInset>
         {/* Header */}
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 overflow-hidden">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
@@ -184,8 +184,8 @@ export default function CategoriesPage() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div className="ml-auto px-4 flex items-center gap-2">
-            <div className="relative flex-1 max-w-sm">
+          <div className="ml-auto px-4 flex items-center gap-2 shrink-0">
+            <div className="relative hidden sm:block w-48">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
                 type="search"
@@ -195,16 +195,16 @@ export default function CategoriesPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <Button 
-              variant={showInactive ? "default" : "outline"} 
+            <Button
+              variant={showInactive ? "default" : "outline"}
               size="sm"
               onClick={() => setShowInactive(!showInactive)}
             >
-              <Filter className="h-4 w-4 mr-2" />
-              {showInactive ? "Hide Inactive" : "Show All"}
+              <Filter className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">{showInactive ? "Hide Inactive" : "Show All"}</span>
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               onClick={fetchCategories}
               disabled={loading}
@@ -217,7 +217,7 @@ export default function CategoriesPage() {
         {/* Main Content */}
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {/* Page Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h1 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
                 <Folder className="h-6 w-6 text-blue-600" />

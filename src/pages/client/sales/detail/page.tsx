@@ -303,7 +303,7 @@ export default function SaleDetailsPage() {
       <AppSidebar userType="client" user={user} />
       <SidebarInset>
         {/* Header */}
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 overflow-hidden">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
@@ -328,7 +328,7 @@ export default function SaleDetailsPage() {
         {/* Main Content */}
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {/* Page Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-4">
               <Button variant="outline" size="sm" onClick={() => navigate(-1)}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -344,7 +344,7 @@ export default function SaleDetailsPage() {
                 <Badge variant="destructive" className="ml-4">VOIDED</Badge>
               )}
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-start sm:items-end">
               <Button variant="outline" onClick={handlePrint}>
                 <Printer className="h-4 w-4 mr-2" />
                 Print
