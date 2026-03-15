@@ -270,7 +270,6 @@ export default function RegisterPage() {
               Redirecting to login page...
             </div>
             <Loader2 className="h-6 w-6 animate-spin mx-auto mt-4 text-gray-400" />
-            <p className="text-xs text-gray-400 mt-2">API: {API_CONFIG.BASE_URL}</p>
           </CardContent>
         </Card>
       </div>

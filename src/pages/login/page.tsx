@@ -117,7 +117,6 @@ function LoginForm() {
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-[#E8302A]" />
             <h2 className="text-lg font-semibold text-gray-900 mb-2">Loading...</h2>
             <p className="text-gray-600">Initializing application</p>
-            <p className="text-xs text-gray-500 mt-2">API: {API_CONFIG.BASE_URL}</p>
           </CardContent>
         </Card>
       </div>

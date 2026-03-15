@@ -304,7 +304,6 @@ export default function SuperAdminDashboard() {
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
           <p className="text-gray-600">Loading dashboard data...</p>
-          <p className="text-xs text-gray-500 mt-2">API: {API_CONFIG.BASE_URL}</p>
         </div>
       </div>
     )
@@ -317,7 +316,6 @@ export default function SuperAdminDashboard() {
           <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-600" />
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Dashboard</h2>
           <p className="text-gray-600 mb-4">{error}</p>
-          <p className="text-xs text-gray-500 mb-4">API: {API_CONFIG.BASE_URL}</p>
           <Button onClick={fetchDashboardData} className="bg-[#E8302A] hover:bg-[#B91C1C]">
             <RefreshCw className="mr-2 h-4 w-4" />
             Try Again

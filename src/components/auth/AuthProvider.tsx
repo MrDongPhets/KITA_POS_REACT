@@ -565,7 +565,6 @@ export function AuthProvider({ children }) {
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#E8302A] mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
-          <p className="text-xs text-gray-500 mt-2">API: {API_CONFIG.BASE_URL}</p>
         </div>
       </div>
     )
